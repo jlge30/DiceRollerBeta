@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Dice Roller</string>
+    <string name="roll">Lanzar</string>
+    <string name="lanzar">Has lanzado</string>
+    <string name="ganado">!!Ganaste una moneda!!</string>
+    <string name="perdido">!!Perdiste una moneda!!</string>
+    <string name="ganado2">¡¡DOBLE 6 Ganaste 2 monedas!!</string>
+    <string name="tiradaspendientes">Tiradas restantes: </string>
+    <string name="bienvenida">Apptimizadores Nativos</string>
+    <string name="jugar">Jugar</string>
+    <string name="salir">Salir</string>
+    <string name="pause">Pausa</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="textoAyuda">El juego consiste en lanzar 10 veces
+        los dados y si tu puntuación es mayor que 6
+        obtienes una moneda,
+        si tienes un 6 doble obtienes 2 monedas
+        y si tienes menos de 6 puntos pierdes una moneda</string>
+    <string name="volver">Volver al menu</string>
+    <string name="tresmejores">Tres mejores</string>
+    <string name="continuar">Continuar</string>
+    <string name="finaljuego">Game Over</string>
+
+
+</resources>
