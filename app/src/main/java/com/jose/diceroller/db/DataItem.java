@@ -2,8 +2,11 @@ package com.jose.diceroller.db;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+
+import com.jose.diceroller.PantallaFinal;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

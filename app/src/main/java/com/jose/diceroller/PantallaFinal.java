@@ -2,6 +2,7 @@ package com.jose.diceroller;
 
 import android.annotation.SuppressLint;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,9 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jose.diceroller.db.DataItem;
 import com.jose.diceroller.db.DbHelper;
+
+import java.time.LocalDate;
 
 public class PantallaFinal extends AppCompatActivity {
 
@@ -38,12 +43,20 @@ public class PantallaFinal extends AppCompatActivity {
         saveName = findViewById(R.id.SaveButton);
 
         saveName.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 DbHelper dbHelper = new DbHelper(PantallaFinal.this);
                 SQLiteDatabase db =dbHelper.getWritableDatabase();
                 if(db != null){
-                    Toast.makeText(PantallaFinal.this, "Puntuación guardada", Toast.LENGTH_LONG).show();
+
+                    LocalDate horaActual = LocalDate.now();
+                    String name = gamerN.getText().toString();
+                    int puntos = datos.getPuntuacion();
+                    DataItem jugador = new DataItem(name, horaActual, puntos);
+                    dbHelper.subirPuntuacion(jugador, PantallaFinal.this);
+                }else{
+                    Toast.makeText(PantallaFinal.this, "Error al acceder a la bd", Toast.LENGTH_LONG).show();
                 }
             }
         });
