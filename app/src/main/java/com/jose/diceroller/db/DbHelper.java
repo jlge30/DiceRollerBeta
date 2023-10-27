@@ -109,5 +109,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
         return dataItems;
     }
+    public void BorrarDatos(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_PUNTUACION,null,null);
+        db.close();
+    }
 }
 
