@@ -1,6 +1,7 @@
 package com.jose.diceroller;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.jose.diceroller.db.DataItem;
 import com.jose.diceroller.db.DbHelper;
 
 import java.time.LocalDate;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PantallaFinal extends AppCompatActivity {
 
@@ -55,6 +58,9 @@ public class PantallaFinal extends AppCompatActivity {
                     int puntos = datos.getPuntuacion();
                     DataItem jugador = new DataItem(name, horaActual, puntos);
                     dbHelper.subirPuntuacion(jugador, PantallaFinal.this);
+                    Intent intent = new Intent(PantallaFinal.this, VentanaPuntuaciones.class);
+                    startActivity(intent);
+                    finish();
                 }else{
                     Toast.makeText(PantallaFinal.this, "Error al acceder a la bd", Toast.LENGTH_LONG).show();
                 }

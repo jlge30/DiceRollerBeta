@@ -11,6 +11,8 @@
     <string name="salir">Salir</string>
     <string name="pause">Pausa</string>
     <string name="ayuda">Ayuda</string>
+    <string name="borrarPuntuaciones">Borrar puntuaciones</string>
+
     <string name="textoAyuda">El juego consiste en lanzar 10 veces
         los dados y si tu puntuación es mayor que 6
         obtienes una moneda,
