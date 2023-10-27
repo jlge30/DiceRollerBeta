@@ -44,17 +44,13 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("Fecha", item.getDateString());
         values.put("Nombre", item.getName());
         values.put("Puntuacion", (Integer)item.getScore());
-        Toast.makeText(context, "fecha "+item.getDateString(), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, "Puntos "+item.getScore(), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, "Nombre "+item.getName(), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, "Tabla "+TABLE_PUNTUACION, Toast.LENGTH_LONG).show();
 // Insertar los datos en la base de datos
         long newRowId = database.insert(TABLE_PUNTUACION, null, values);
         try {
 // Comprobar si la inserción fue exitosa
             if (newRowId != -1) {
                 Log.d("MiApp", "Puntuación guardada correctamente. newRowId = " + newRowId);
-                Toast.makeText(context, "Puntuación guardada", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Puntuación de "+item.getName()+" guardada", Toast.LENGTH_LONG).show();
             } else {
                 Log.e("MiApp", "Error al guardar la puntuación.");
                 Toast.makeText(context, "Error al guardar la puntuación", Toast.LENGTH_LONG).show();
