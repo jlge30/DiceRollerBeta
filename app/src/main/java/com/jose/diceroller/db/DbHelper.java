@@ -2,6 +2,7 @@ package com.jose.diceroller.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
@@ -12,6 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jose.diceroller.PantallaFinal;
+
+import java.sql.PreparedStatement;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -61,4 +67,47 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.e("MiApp", "Error al guardar la puntuación: " + e.getMessage());
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<DataItem> DescargarPuntuaciones() {
+        List<DataItem> dataItems = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            String[] projection = {
+                    "Nombre",
+                    "Fecha",
+                    "Puntuacion"
+            };
+
+            Cursor cursor = db.query(TABLE_PUNTUACION, projection, null, null, null, null, null);
+            int nameColumnIndex = cursor.getColumnIndex("Nombre");
+            int fechaColumnIndex = cursor.getColumnIndex("Fecha");
+            int scoreColumnIndex = cursor.getColumnIndex("Puntuacion");
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    if (nameColumnIndex != -1 && fechaColumnIndex != -1 && scoreColumnIndex != -1) {
+                        String name = cursor.getString(nameColumnIndex);
+
+                        String fechaString = cursor.getString(fechaColumnIndex);
+                        String[] partes = fechaString.split("/");
+                        // Reorganizar la fecha en formato ISO 8601
+                        String fechaISO = partes[2] + "-" + partes[1] + "-" + partes[0];
+                        // Analizar la fecha en formato ISO 8601
+                        LocalDate fecha = LocalDate.parse(fechaISO);
+                        int score = cursor.getInt(scoreColumnIndex);
+                        DataItem dataItem = new DataItem(name, fecha, score);
+                        dataItems.add(dataItem);
+                    }
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return dataItems;
+    }
 }
+

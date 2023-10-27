@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jose.diceroller.db.DataAdapter;
 import com.jose.diceroller.db.DataItem;
+import com.jose.diceroller.db.DbHelper;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class VentanaPuntuaciones extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private DataAdapter dataAdapter;
+    private DbHelper dbh = new DbHelper(VentanaPuntuaciones.this);
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -42,9 +44,11 @@ public class VentanaPuntuaciones extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private List<DataItem> getDataFromSQLite() {
 
-        List<DataItem> dataItems = new ArrayList<>();
-        dataItems.add(new DataItem("Nombre1", LocalDate.now(), 100));
-        dataItems.add(new DataItem("Nombre2", LocalDate.now(), 200));
+        List<DataItem> dataItems= new ArrayList<>();
+        dataItems = dbh.DescargarPuntuaciones();
+
+        //dataItems.add(new DataItem("Nombre1", LocalDate.now(), 100));
+        //dataItems.add(new DataItem("Nombre2", LocalDate.now(), 200));
         // ...
         return dataItems;
     }
