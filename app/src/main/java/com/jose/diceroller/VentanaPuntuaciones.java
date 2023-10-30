@@ -1,12 +1,13 @@
 package com.jose.diceroller;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,8 +20,6 @@ import com.jose.diceroller.db.DataAdapter;
 import com.jose.diceroller.db.DataItem;
 import com.jose.diceroller.db.DbHelper;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,5 +82,26 @@ public class VentanaPuntuaciones extends AppCompatActivity {
         List<DataItem> dataItems= new ArrayList<>();
         dataItems = dbh.DescargarPuntuaciones();
         return dataItems;
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        int id = item.getItemId();
+        if ( id == R.id.menu_inicio){
+            Intent intent = new Intent(VentanaPuntuaciones.this,MenuInicial.class);
+            startActivity(intent);
+            finish();
+            //Toast.makeText(this, "Has clicado la primera opcion", Toast.LENGTH_SHORT).show();
+        }else if ( id == R.id.menu_salir){
+            finish();
+        }
+        else if(id == R.id.menu_salir){
+            finish();
+        }
+        return true;
     }
 }

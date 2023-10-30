@@ -3,6 +3,9 @@ package com.jose.diceroller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
@@ -156,12 +159,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    finish();//cerramos la primera vista
+
                     Intent intent = new Intent(MainActivity.this, PantallaFinal.class);
                     startActivity(intent);
+                    finish();//cerramos la primera vista
 
                 }
             }, 2000); // retraso de 2 segundos el cierre de la ventana
+
 
 
         }
@@ -217,6 +222,27 @@ public class MainActivity extends AppCompatActivity {
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(500);
         view.startAnimation(animation);
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        int id = item.getItemId();
+        if ( id == R.id.menu_inicio){
+            Intent intent = new Intent(MainActivity.this,MenuInicial.class);
+            startActivity(intent);
+            finish();
+            //Toast.makeText(this, "Has clicado la primera opcion", Toast.LENGTH_SHORT).show();
+        }else if ( id == R.id.menu_salir){
+            finish();
+        }
+        else if(id == R.id.menu_salir){
+            finish();
+        }
+        return true;
     }
 
 

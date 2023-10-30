@@ -12,13 +12,14 @@
     <string name="pause">Pausa</string>
     <string name="ayuda">Ayuda</string>
     <string name="borrarPuntuaciones">Borrar puntuaciones</string>
+    <string name="inicio">Inicio</string>
 
     <string name="textoAyuda">El juego consiste en lanzar 10 veces
         los dados y si tu puntuación es mayor que 6
         obtienes una moneda,
         si tienes un 6 doble obtienes 2 monedas
         y si tienes menos de 6 puntos pierdes una moneda</string>
-    <string name="volver">Volver al menu</string>
+    <string name="volver">Volver al inicio</string>
     <string name="tresmejores">Tres mejores</string>
     <string name="continuar">Continuar</string>
     <string name="finaljuego">Game Over</string>
@@ -27,4 +28,7 @@
     <string name="Scores">Puntuaciones</string>
     <string name="SaveButton">Guardar Puntuación</string>
     <string name="NameTitle">Introduce tu Nombre</string>
+    <string name="top3">Top 3</string>
+    <string name="borrarBD">Borrar BBDD</string>
+    <string name="vertodosregistros">Listar jugadas</string>
 </resources>
