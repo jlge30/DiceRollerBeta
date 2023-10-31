@@ -29,11 +29,13 @@ public class Bienvenida extends Activity {
         Timer tiempo = new Timer();//retardamos la otra ventana
         tiempo.schedule(tarea, 3000);
     }
+    //añadimos los menus
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
+    //opciones del menú
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         int id = item.getItemId();

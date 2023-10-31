@@ -1,6 +1,7 @@
 package com.jose.diceroller.db;
 
 public class PlayerHistory {
+    //atributos del jugador
     public static final String TABLE_JUGADORES = "jugadores";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NOMBRE = "nombre";
@@ -11,7 +12,7 @@ public class PlayerHistory {
     private int puntuacion;
     private String fecha;
 
-
+    //constructores
     public PlayerHistory(){
 
     }

@@ -20,13 +20,10 @@ public class VentanaAyuda extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventana_ayuda);
         btnVolver = findViewById(R.id.btn_inicio_ayuda);
-
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
 
-
-
-            public void onClick(View v) {
+            public void onClick(View v) {//volvemos al menú inicial
                 Intent intent = new Intent(VentanaAyuda.this, MenuInicial.class);
                 startActivity(intent);
                 finish();
@@ -34,6 +31,7 @@ public class VentanaAyuda extends AppCompatActivity {
             }
         });
     }
+    //añadimos al menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);

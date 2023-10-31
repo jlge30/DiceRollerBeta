@@ -1,30 +1,13 @@
 package com.jose.diceroller;
 
 import android.app.Application;
-
-import java.util.Date;
-
+/*
+Clase creada para acumular la puntuación de una pantalla a otra
+ */
 public class GlobalVariables extends Application{
-    private String nombre;
+
 
     private int puntuacion;
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    private Date fecha;
-
-    public  String getNombre(){
-        return nombre;
-    }
-    public void setNombre(String nombre){
-        this.nombre = nombre;
-    }
 
     public int getPuntuacion(){
         return puntuacion;

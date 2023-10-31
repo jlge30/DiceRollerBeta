@@ -57,20 +57,18 @@ public class PantallaFinal extends AppCompatActivity {
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
 
-
-
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                if (gamerN.getText().toString().isEmpty()){
+                if (gamerN.getText().toString().isEmpty()){//comprobamos que la caja de texto nombre tiene datos
                     Toast.makeText(PantallaFinal.this, "Introduce el nombre", Toast.LENGTH_SHORT).show();
                 }else insertJugadorRx();
-                gamerN.setText("");
-                datos.setPuntuacion(0);
-                textView.setVisibility(View.INVISIBLE);
+                gamerN.setText("");//vaciamos la caja de texto
+                datos.setPuntuacion(0);//dejamos la puntuación a 0
+                textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
                 txtPuntuacion.setVisibility(View.INVISIBLE);
-                saveName.setEnabled(false);
+                saveName.setEnabled(false);//deshabilitamos el botón de guardar
 
 
 
@@ -91,6 +89,7 @@ public class PantallaFinal extends AppCompatActivity {
 //                }
             }
         });
+        //botón salir
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +107,7 @@ public class PantallaFinal extends AppCompatActivity {
 
     }
 
+    //Insertar jugador con RxJava
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
         int puntuacion = datos.getPuntuacion();
@@ -139,6 +139,7 @@ public class PantallaFinal extends AppCompatActivity {
                     }
                 });
     }
+    //añadimos el menún
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -160,9 +161,5 @@ public class PantallaFinal extends AppCompatActivity {
         }
         return true;
     }
-
-
-
-
 
 }

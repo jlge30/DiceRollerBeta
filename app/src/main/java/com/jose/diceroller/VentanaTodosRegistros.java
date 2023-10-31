@@ -27,7 +27,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class VentanaTodosRegistros extends AppCompatActivity {
     private LinearLayout linearLayoutJugadores;
-
     private DbManager dbManager;
 
     @Override
@@ -39,9 +38,10 @@ public class VentanaTodosRegistros extends AppCompatActivity {
         listarJugadorRx();
     }
 
+    //función listar jugadores con RxJava
     @SuppressLint("CheckResult")
     private void listarJugadorRx(){
-        dbManager.getAllJugadores()
+        dbManager.getAllJugadores()//todos los jugadores
                 .subscribeOn(Schedulers.io()) // Ejecuta la consulta en un hilo diferente
                 .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
                 .subscribe(new SingleObserver<List<PlayerHistory>>() {
@@ -52,8 +52,6 @@ public class VentanaTodosRegistros extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {
-                        //txtTopThree.setText("Top 3");
-
                         for (PlayerHistory playerHistory : playerHistories) {
                             TextView textView = new TextView(VentanaTodosRegistros.this);
                             textView.setTextSize(15);
@@ -77,7 +75,7 @@ public class VentanaTodosRegistros extends AppCompatActivity {
 
 
     }
-
+    //añadimos la barra de menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);

@@ -37,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;//atributo para retrasar la aparción de los mensajes
 
 
-
-    //GlobalVariables puntuacion1 = (GlobalVariables) getApplicationContext();//variable global
-
     private int tiradas = 10;
 
     @Override
@@ -149,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 500); // retraso de 0.5 segundos el marcador para que coincida con los mensajes
 
-
-
         if (tiradas ==0 ){
             btnLanzar.setVisibility(View.INVISIBLE);//ocultar botón lanzar
             txtFinalJuego.setVisibility(View.VISIBLE);
@@ -158,20 +153,13 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-
                     Intent intent = new Intent(MainActivity.this, PantallaFinal.class);
                     startActivity(intent);
                     finish();//cerramos la primera vista
 
                 }
             }, 2000); // retraso de 2 segundos el cierre de la ventana
-
-
-
         }
-
-
 
         /*
         condicionales para que aparezcan la imagen del dado 1 en función del resultado del numero 1
@@ -223,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
         animation.setDuration(500);
         view.startAnimation(animation);
     }
+
+    //integracion de la barra de menus
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -244,9 +234,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
-
-
 
 }

@@ -14,10 +14,10 @@ public class DbManager {
 
     private DbHelper1 dbHelper;
 
-
     public DbManager(Context context) {
-        dbHelper= new DbHelper1(context);
+        dbHelper= new DbHelper1(context);//instanciamos la clase DbHelper para manipular la BBDD con Sqlite
     }
+    //insercion del jugador con RXJava
     public Single<Long> insertJugador(String nombre, int puntuacion, String fecha) {
         return Single.fromCallable(() -> {
             ContentValues values = new ContentValues();
@@ -29,11 +29,11 @@ public class DbManager {
             return id;
         });
     }
-
+    //listado todos jugadores RXJava
     public Single<List<PlayerHistory>> getAllJugadores() {
         return Single.fromCallable(() -> {
             List<PlayerHistory> jugadores = new ArrayList<>();
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();//ponemos la BBDD en lectura
             Cursor cursor = db.query(PlayerHistory.TABLE_JUGADORES, null, null, null, null, null, null);
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -55,22 +55,23 @@ public class DbManager {
                 cursor.close();
             }
 
-            dbHelper.close();
+            dbHelper.close();//cerramos la BBDD
             return jugadores;
         });
     }
+    //listado los tres mejores con RXJava
     public Single<List<PlayerHistory>> getTopThree() {
         return Single.fromCallable(() -> {
             List<PlayerHistory> jugadores = new ArrayList<>();
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String[] projection = null; // null para seleccionar todas las columnas
-            String selection = null; // null para no aplicar ninguna condición WHERE
-            String[] selectionArgs = null; // null para no utilizar argumentos de selección
-            String sortOrder = PlayerHistory.COLUMN_PUNTUACION+" DESC"; // Ordena por puntuación de forma descendente
+            SQLiteDatabase db = dbHelper.getReadableDatabase();//ponemos la BBDD en lectura
+            String[] projection = null; //seleccionar todas las columnas
+            String selection = null; //no aplicamos ninguna condición WHERE
+            String[] selectionArgs = null; //no utilizar argumentos de selección
+            String sortOrder = PlayerHistory.COLUMN_PUNTUACION+" DESC"; // ordenado por puntuación de forma descendente
             String limit = "3"; // Limita los resultados a 3
             Cursor cursor = db.query(PlayerHistory.TABLE_JUGADORES, projection, selection, selectionArgs, null,null,sortOrder, limit);
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {//obtenemos los datos
                 int idIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_ID);
                 int nameIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_NOMBRE);
                 int scoreIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_PUNTUACION);
@@ -82,7 +83,7 @@ public class DbManager {
                         int score = cursor.getInt(scoreIndex);
                         String fecha = cursor.getString(fechaIndex);
                         PlayerHistory playerHistory = new PlayerHistory(id, nombre, score, fecha);
-                        jugadores.add(playerHistory);
+                        jugadores.add(playerHistory);//añadimos los jugadores
                     }
                 } while (cursor.moveToNext());
 
@@ -93,9 +94,11 @@ public class DbManager {
             return jugadores;
         });
     }
+
+    //eliminacion todos los jugadores con RXJava
     public Single<Integer> deleteAllJugadores() {
         return Single.fromCallable(() -> {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();//ponemos la bbdd escribible
             int rowsDeleted = db.delete(PlayerHistory.TABLE_JUGADORES, null, null);
             dbHelper.close();
             return rowsDeleted;

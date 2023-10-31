@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class DbHelper1 extends SQLiteOpenHelper {
+    //atributos
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NOMBRE = "jugador.db";
     private static final String TABLE_JUGADORES = "jugadores";
@@ -52,7 +53,7 @@ public class DbHelper1 extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE " + TABLE_JUGADORES);
         onCreate(sqLiteDatabase);
     }
-
+//insertar jugadores sin RxJava
     public void insertarJugador(PlayerHistory playerHistory){
         try {
             DbHelper dbHelper = new DbHelper(context);//creacion de la base de datos
@@ -60,14 +61,15 @@ public class DbHelper1 extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(DbHelper1.COLUMN_NOMBRE, playerHistory.getNombre());
             values.put(DbHelper1.COLUMN_PUNTUACION, playerHistory.getPuntuacion());
-            values.put(DbHelper1.COLUMN_FECHA, playerHistory.getFecha());//fecha en el constructor automática
-            db.insert(DbHelper1.TABLE_JUGADORES, null, values);// ver en ejemplo el long para qué sirve
+            values.put(DbHelper1.COLUMN_FECHA, playerHistory.getFecha());
+            db.insert(DbHelper1.TABLE_JUGADORES, null, values);
             db.close();
         }catch (Exception ex){
             ex.toString();
         }
 
     }
+    //listar jugadores sin Rxjava
     public List<PlayerHistory> getAllJugadores(){
         List<PlayerHistory> playerHistoryModelsList = new ArrayList<>();
         String query = "SELECT * FROM "+TABLE_JUGADORES+ " ORDER BY "+ COLUMN_PUNTUACION+ " DESC ";
@@ -88,6 +90,8 @@ public class DbHelper1 extends SQLiteOpenHelper {
         db.close();
         return playerHistoryModelsList;
     }
+
+    //top 3 mejores sin RXjava
     public List<PlayerHistory> getTop3(){
         List<PlayerHistory> playerHistoryModelsList = new ArrayList<>();
         String query = "SELECT * FROM "+TABLE_JUGADORES+ " ORDER BY "+ COLUMN_PUNTUACION+ " DESC LIMIT 3 ";
