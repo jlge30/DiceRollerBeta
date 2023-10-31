@@ -63,12 +63,15 @@ public class PantallaFinal extends AppCompatActivity {
             public void onClick(View view) {
                 if (gamerN.getText().toString().isEmpty()){//comprobamos que la caja de texto nombre tiene datos
                     Toast.makeText(PantallaFinal.this, "Introduce el nombre", Toast.LENGTH_SHORT).show();
-                }else insertJugadorRx();
-                gamerN.setText("");//vaciamos la caja de texto
-                datos.setPuntuacion(0);//dejamos la puntuación a 0
-                textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
-                txtPuntuacion.setVisibility(View.INVISIBLE);
-                saveName.setEnabled(false);//deshabilitamos el botón de guardar
+                }else {
+                    insertJugadorRx();
+                    gamerN.setText("");//vaciamos la caja de texto
+                    datos.setPuntuacion(0);//dejamos la puntuación a 0
+                    textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
+                    txtPuntuacion.setVisibility(View.INVISIBLE);
+                    saveName.setEnabled(false);//deshabilitamos el botón de guardar
+                }
+
 
 
 
