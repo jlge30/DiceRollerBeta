@@ -28,7 +28,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MenuInicial extends AppCompatActivity {
-    private Button btnJugar, btnayuda;
+    private Button btnJugar, btnayuda, btnSalir;
     private LinearLayout linearLayoutJugadores;
     private DbManager dbManager;
 
@@ -43,12 +43,29 @@ public class MenuInicial extends AppCompatActivity {
         linearLayoutJugadores = findViewById(R.id.linear_layout_jugadores);
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);
+        btnayuda = findViewById(R.id.btn_ayuda);
+        btnSalir = findViewById(R.id.btn_salir_juego);
         listarJugadorRx();
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(MenuInicial.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnSalir.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnayuda.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(MenuInicial.this, VentanaAyuda.class);
                 startActivity(intent);
             }
         });
@@ -65,16 +82,16 @@ public class MenuInicial extends AppCompatActivity {
         int id = item.getItemId();
         if ( id == R.id.menu_borrarBD){
             eliminarRegistros();
-
-//            finish();
+            finish();
             //Toast.makeText(this, "Has clicado la primera opcion", Toast.LENGTH_SHORT).show();
         }else if ( id == R.id.menu_ayuda){
             Intent intent = new Intent(MenuInicial.this,VentanaAyuda.class);
             startActivity(intent);
-            //finish();
+            finish();
         }else if (id == R.id.menu_ver_all){
             Intent intent = new Intent(MenuInicial.this,VentanaTodosRegistros.class);
             startActivity(intent);
+            finish();
 
         }
         else if(id == R.id.menu_salir){
@@ -98,7 +115,6 @@ public class MenuInicial extends AppCompatActivity {
                     public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {
                         //txtTopThree.setText("Top 3");
                         int posicion = 1;
-
                         for (PlayerHistory playerHistory : playerHistories) {
 
                             int color = getResources().getColor(R.color.blue);

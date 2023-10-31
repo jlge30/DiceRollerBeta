@@ -18,16 +18,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.864" />
+        app:layout_constraintVertical_bias="0.352" />
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -41,16 +43,41 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btn_ayuda"
+        android:layout_width="261dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="340dp"
+        android:backgroundTint="@color/blue"
+        android:text="@string/ayuda"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btn_jugar"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="428dp"
         android:backgroundTint="@color/green"
         android:text="@string/jugar"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_salir_juego"
+        android:layout_width="261dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="520dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/salir"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

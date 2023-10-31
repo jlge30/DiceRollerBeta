@@ -8,16 +8,22 @@
 
     <Button
         android:id="@+id/btnLanzar"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="250dp"
+        android:layout_height="57dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="104dp"
+        android:backgroundTint="@color/green"
+        android:contextClickable="false"
+        android:elegantTextHeight="false"
+        android:fontFamily="@font/alfa_slab_one"
+        android:freezesText="false"
+        android:gravity="center"
         android:onClick="lanzar"
         android:text="@string/roll"
+        android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="36sp"
-        android:textStyle="bold"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.458"
@@ -53,8 +59,8 @@
 
     <TextView
         android:id="@+id/txt_mensaje"
-        android:layout_width="366dp"
-        android:layout_height="55dp"
+        android:layout_width="362dp"
+        android:layout_height="91dp"
         android:fontFamily="@font/alfa_slab_one"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -62,10 +68,10 @@
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/image_dado1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.954"
+        app:layout_constraintVertical_bias="1.0"
         tools:text="mensaje" />
 
     <TextView
@@ -88,24 +94,26 @@
         android:layout_height="65dp"
         app:layout_constraintBottom_toTopOf="@+id/txt_mensaje"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtTiradas"
-        app:layout_constraintVertical_bias="0.693"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/coin" />
 
     <TextView
         android:id="@+id/txt_puntuacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="X"
-        android:textStyle="bold"
         android:textSize="35sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/txtTiradas" />
+
+
 
     <TextView
         android:id="@+id/txt_final_juego"

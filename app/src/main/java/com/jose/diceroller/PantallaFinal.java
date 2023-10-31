@@ -36,9 +36,10 @@ public class PantallaFinal extends AppCompatActivity {
 
     private TextView txtPuntuacion;
     private GlobalVariables datos;
-    private Button saveName;
+    private Button saveName, btnSalir, btnInicio;
 
     private DbManager dbManager;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -53,6 +54,8 @@ public class PantallaFinal extends AppCompatActivity {
         textView.setText(puntos);//mensaje de número de monedas
         saveName = findViewById(R.id.SaveButton);
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
+        btnInicio =findViewById(R.id.btn_volver_jugar);
+        btnSalir = findViewById(R.id.btn_salir);
 
 
 
@@ -88,8 +91,23 @@ public class PantallaFinal extends AppCompatActivity {
 //                }
             }
         });
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        btnInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PantallaFinal.this, MenuInicial.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
+
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
         int puntuacion = datos.getPuntuacion();
@@ -142,6 +160,7 @@ public class PantallaFinal extends AppCompatActivity {
         }
         return true;
     }
+
 
 
 

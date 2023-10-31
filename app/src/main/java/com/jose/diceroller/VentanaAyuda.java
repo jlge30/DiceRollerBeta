@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,20 @@ public class VentanaAyuda extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventana_ayuda);
+        btnVolver = findViewById(R.id.btn_inicio_ayuda);
+
+        btnVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+
+
+            public void onClick(View v) {
+                Intent intent = new Intent(VentanaAyuda.this, MenuInicial.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -18,18 +18,16 @@ public class Bienvenida extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bienvenida);
 
-
-
         TimerTask tarea =new TimerTask() {//creamos la tarea de la ventana bienvenida
             @Override
-            public void run() {//tarea para que la pantalla esté visible 5 segundos
+            public void run() {//tarea para que la pantalla esté visible 3 segundos
                 Intent intent = new Intent(Bienvenida.this, MenuInicial.class);
                 startActivity(intent);
                 finish();
             }
         };
         Timer tiempo = new Timer();//retardamos la otra ventana
-        tiempo.schedule(tarea, 5000);
+        tiempo.schedule(tarea, 3000);
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
