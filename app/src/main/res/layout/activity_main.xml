@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#43EA88"
     tools:context=".MainActivity">
 
     <Button
@@ -13,7 +15,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="104dp"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/blue"
         android:contextClickable="false"
         android:elegantTextHeight="false"
         android:fontFamily="@font/alfa_slab_one"
@@ -98,7 +100,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtTiradas"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/coin" />
+        app:srcCompat="@drawable/euro" />
 
     <TextView
         android:id="@+id/txt_puntuacion"

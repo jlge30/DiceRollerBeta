@@ -173,7 +173,7 @@ public class MenuInicial extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Confirmación");
-        builder.setMessage("¿Estás seguro de que deseas continuar?");
+        builder.setMessage("¿Estás seguro de que deseas eliminar todos los registros?");
 
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
