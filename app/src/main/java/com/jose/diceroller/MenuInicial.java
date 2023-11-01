@@ -1,5 +1,7 @@
 package com.jose.diceroller;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -115,6 +117,7 @@ public class MenuInicial extends AppCompatActivity {
                 .subscribe(new SingleObserver<List<PlayerHistory>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        Log.d(TAG, "onSubscribe: called: ");
 
                     }
 
@@ -132,12 +135,13 @@ public class MenuInicial extends AppCompatActivity {
                             linearLayoutJugadores.addView(textView);//añadimos los jugadores al Layout
                             posicion ++;
                         }
+                        Log.d(TAG, "onSuccess: " + Thread.currentThread().getName());
                     }
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Toast.makeText(MenuInicial.this, "Error al listar", Toast.LENGTH_SHORT).show();
 
-                        Log.e("Visualizacion","Error al listar", e);
+                        Log.e(TAG, "onError: ",e );
 
                     }
                 });

@@ -1,5 +1,7 @@
 package com.jose.diceroller;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -47,6 +49,7 @@ public class VentanaTodosRegistros extends AppCompatActivity {
                 .subscribe(new SingleObserver<List<PlayerHistory>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        Log.d(TAG, "onSubscribe: called:");
 
                     }
 
@@ -61,6 +64,7 @@ public class VentanaTodosRegistros extends AppCompatActivity {
                             textView.setText(playerHistory.getNombre() +" "+ playerHistory.getPuntuacion()+ " monedas fecha: "+ playerHistory.getFecha());
                             linearLayoutJugadores.addView(textView);
                         }
+                        Log.d(TAG, "onSuccess: " + Thread.currentThread().getName());
 
 
                     }
@@ -68,7 +72,7 @@ public class VentanaTodosRegistros extends AppCompatActivity {
                     public void onError(@NonNull Throwable e) {
                         Toast.makeText(VentanaTodosRegistros.this, "Error al listar", Toast.LENGTH_SHORT).show();
 
-                        Log.e("Visualizacion","Error al listar", e);
+                        Log.e(TAG, "onError: ",e );
 
                     }
                 });
