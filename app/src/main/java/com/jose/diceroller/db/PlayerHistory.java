@@ -23,6 +23,7 @@ public class PlayerHistory {
         this.fecha = fecha;
     }
     public PlayerHistory(int id, String nombre, int puntuacion, String fecha) {
+        this.id = id;
         this.nombre = nombre;
         this.puntuacion = puntuacion;
         this.fecha = fecha;

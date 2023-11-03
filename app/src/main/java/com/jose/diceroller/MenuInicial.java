@@ -1,26 +1,23 @@
 package com.jose.diceroller;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jose.diceroller.db.DbManager;
+import com.jose.diceroller.db.ListAdapter;
 import com.jose.diceroller.db.PlayerHistory;
 
 import java.util.List;
@@ -35,7 +32,7 @@ public class MenuInicial extends AppCompatActivity {
 
     //atributos
     private Button btnJugar, btnayuda, btnSalir;
-    private LinearLayout linearLayoutJugadores;
+
     private DbManager dbManager;//instancia gestíon de la BBDD
     private TextView txtTopThree;
 
@@ -45,13 +42,11 @@ public class MenuInicial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
         btnJugar = findViewById(R.id.btn_jugar);
-        linearLayoutJugadores = findViewById(R.id.linear_layout_jugadores);
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);
         btnayuda = findViewById(R.id.btn_ayuda);
         btnSalir = findViewById(R.id.btn_salir_juego);
-
-        listarJugadorRx();//funcion para listar con RxJava
+        listarTopThree();
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
@@ -98,7 +93,7 @@ public class MenuInicial extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else if (id == R.id.menu_ver_all){
-            Intent intent = new Intent(MenuInicial.this,VentanaTodosRegistros.class);
+            Intent intent = new Intent(MenuInicial.this,RecyclerView.class);
             startActivity(intent);
             finish();
         }
@@ -108,45 +103,8 @@ public class MenuInicial extends AppCompatActivity {
         return true;
     }
 
-    //función listar jugadores con RxJava
-    @SuppressLint("CheckResult")
-    private void listarJugadorRx(){
-        dbManager.getTopThree()//lista de los tres primeros
-                .subscribeOn(Schedulers.io()) // Ejecuta la consulta en un hilo diferente
-                .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
-                .subscribe(new SingleObserver<List<PlayerHistory>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        Log.d(TAG, "onSubscribe: called: ");
 
-                    }
 
-                    @Override
-                    public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {//nos devuelve listado de jugadores
-                        int posicion = 1;
-                        for (PlayerHistory playerHistory : playerHistories) {
-                            int color = getResources().getColor(R.color.blue);
-                            TextView textView = new TextView(MenuInicial.this);//creamos un textview
-                            textView.setTextSize(20);
-                            textView.setTextColor(color);
-                            Typeface typeface = textView.getTypeface();
-                            textView.setTypeface(Typeface.create(typeface, Typeface.BOLD));
-                            textView.setText(posicion+"- "+ playerHistory.getNombre() +" "+ playerHistory.getPuntuacion()+ " monedas\n"+ playerHistory.getFecha());
-                            linearLayoutJugadores.addView(textView);//añadimos los jugadores al Layout
-                            posicion ++;
-                        }
-                        Log.d(TAG, "onSuccess: " + Thread.currentThread().getName());
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Toast.makeText(MenuInicial.this, "Error al listar", Toast.LENGTH_SHORT).show();
-
-                        Log.e(TAG, "onError: ",e );
-
-                    }
-                });
-
-    }
 
     //funcion eliminación BBDD con RxJava
     @SuppressLint("CheckResult")
@@ -195,6 +153,34 @@ public class MenuInicial extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+    //función listar jugadores con RxJava
+    public void listarTopThree() {
+        dbManager.getTopThree()
+                .subscribeOn(Schedulers.io()) // Ejecuta la consulta en un hilo diferente
+                .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
+                .subscribe(new SingleObserver<List<PlayerHistory>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {
+                        ListAdapter listAdapter = new ListAdapter(playerHistories, MenuInicial.this);
+
+                        androidx.recyclerview.widget.RecyclerView recyclerView = findViewById(R.id.listTopThree);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MenuInicial.this));
+                        recyclerView.setAdapter(listAdapter);
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
 }

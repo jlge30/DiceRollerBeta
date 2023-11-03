@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintVertical_bias="0.818" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -34,21 +34,24 @@
         app:layout_constraintVertical_bias="0.3"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_jugadores"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listTopThree"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:layout_height="600dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="1dp"
+            android:background="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </ScrollView>
 
     <Button
         android:id="@+id/btn_ayuda"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="428dp"
         android:backgroundTint="@color/blue"
         android:text="@string/ayuda"
         android:textSize="20sp"
@@ -61,7 +64,7 @@
         android:id="@+id/btn_jugar"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="484dp"
         android:backgroundTint="@color/green"
         android:text="@string/jugar"
         android:textSize="20sp"
@@ -74,7 +77,7 @@
         android:id="@+id/btn_salir_juego"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="520dp"
+        android:layout_marginTop="540dp"
         android:backgroundTint="@color/red"
         android:text="@string/salir"
         android:textSize="20sp"
