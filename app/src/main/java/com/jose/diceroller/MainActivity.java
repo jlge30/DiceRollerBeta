@@ -1,6 +1,7 @@
 package com.jose.diceroller;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         //setTheme(R.style.SplashTeme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         txtTiradas = findViewById(R.id.txtTiradas);
         String mensaje = "Tiradas Pendientes: " + String.valueOf(tiradas);
         txtTiradas.setText(mensaje);

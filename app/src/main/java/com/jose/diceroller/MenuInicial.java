@@ -3,6 +3,7 @@ package com.jose.diceroller;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +42,8 @@ public class MenuInicial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         btnJugar = findViewById(R.id.btn_jugar);
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);

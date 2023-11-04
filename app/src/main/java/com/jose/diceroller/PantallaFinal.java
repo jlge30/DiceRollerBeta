@@ -2,6 +2,7 @@ package com.jose.diceroller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,8 @@ public class PantallaFinal extends AppCompatActivity {
         datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantalla_final);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         dbManager = new DbManager(this);
         textView = findViewById(R.id.txt_puntos);//localizamos el txt de los puntos
         gamerN = findViewById(R.id.txtGamerN);

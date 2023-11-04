@@ -2,6 +2,7 @@ package com.jose.diceroller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,8 @@ public class VentanaAyuda extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventana_ayuda);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         btnVolver = findViewById(R.id.btn_inicio_ayuda);
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
