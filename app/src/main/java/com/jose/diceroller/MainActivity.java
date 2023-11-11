@@ -1,8 +1,12 @@
 package com.jose.diceroller;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
@@ -34,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;//atributo para retrasar la aparción de los mensajes
 
 
-
-    //GlobalVariables puntuacion1 = (GlobalVariables) getApplicationContext();//variable global
-
     private int tiradas = 10;
 
     @Override
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         //setTheme(R.style.SplashTeme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         txtTiradas = findViewById(R.id.txtTiradas);
         String mensaje = "Tiradas Pendientes: " + String.valueOf(tiradas);
         txtTiradas.setText(mensaje);
@@ -146,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 500); // retraso de 0.5 segundos el marcador para que coincida con los mensajes
 
-
-
         if (tiradas ==0 ){
             btnLanzar.setVisibility(View.INVISIBLE);//ocultar botón lanzar
             txtFinalJuego.setVisibility(View.VISIBLE);
@@ -155,18 +156,13 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-                    finish();//cerramos la primera vista
                     Intent intent = new Intent(MainActivity.this, PantallaFinal.class);
                     startActivity(intent);
+                    finish();//cerramos la primera vista
 
                 }
             }, 2000); // retraso de 2 segundos el cierre de la ventana
-
-
         }
-
-
 
         /*
         condicionales para que aparezcan la imagen del dado 1 en función del resultado del numero 1
@@ -219,8 +215,27 @@ public class MainActivity extends AppCompatActivity {
         view.startAnimation(animation);
     }
 
-
-
-
+    //integracion de la barra de menus
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        int id = item.getItemId();
+        if ( id == R.id.menu_inicio){
+            Intent intent = new Intent(MainActivity.this,MenuInicial.class);
+            startActivity(intent);
+            finish();
+            //Toast.makeText(this, "Has clicado la primera opcion", Toast.LENGTH_SHORT).show();
+        }else if ( id == R.id.menu_salir){
+            finish();
+        }
+        else if(id == R.id.menu_salir){
+            finish();
+        }
+        return true;
+    }
 
 }

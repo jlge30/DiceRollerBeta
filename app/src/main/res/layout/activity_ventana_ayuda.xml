@@ -4,4 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VentanaAyuda"/>
+    android:background="#FFFFFF"
+    android:backgroundTint="#43EA88"
+    tools:context=".VentanaAyuda">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="329dp"
+        android:layout_height="456dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/textoAyuda"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.378" />
+
+    <Button
+        android:id="@+id/btn_inicio_ayuda"
+        android:layout_width="184dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/inicio"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

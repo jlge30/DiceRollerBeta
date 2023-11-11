@@ -3,12 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/item_pause"
-        android:title="@string/pause" />
+        android:id="@+id/menu_inicio"
+        android:title="@string/inicio" />
     <item
-        android:id="@+id/item_continuar"
-        android:title="@string/continuar" />
-    <item
-        android:id="@+id/item_volver_menu"
-        android:title="@string/volver" />
+        android:id="@+id/menu_salir"
+        android:title="@string/salir" />
 </menu>
