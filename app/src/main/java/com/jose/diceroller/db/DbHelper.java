@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class DbHelper1 extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
     //atributos
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NOMBRE = "jugador.db";
@@ -34,7 +34,7 @@ public class DbHelper1 extends SQLiteOpenHelper {
 
 
 
-    public DbHelper1(@Nullable Context context) {//creacion de la base de datos
+    public DbHelper(@Nullable Context context) {//creacion de la base de datos
         super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
         this.context = context;
 
