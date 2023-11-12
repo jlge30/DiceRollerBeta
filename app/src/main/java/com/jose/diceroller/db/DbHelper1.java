@@ -1,16 +1,10 @@
 package com.jose.diceroller.db;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class DbHelper1 extends SQLiteOpenHelper {
     //atributos
@@ -53,61 +47,5 @@ public class DbHelper1 extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE " + TABLE_JUGADORES);
         onCreate(sqLiteDatabase);
     }
-//insertar jugadores sin RxJava
-    public void insertarJugador(PlayerHistory playerHistory){
-        try {
-            DbHelper dbHelper = new DbHelper(context);//creacion de la base de datos
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(DbHelper1.COLUMN_NOMBRE, playerHistory.getNombre());
-            values.put(DbHelper1.COLUMN_PUNTUACION, playerHistory.getPuntuacion());
-            values.put(DbHelper1.COLUMN_FECHA, playerHistory.getFecha());
-            db.insert(DbHelper1.TABLE_JUGADORES, null, values);
-            db.close();
-        }catch (Exception ex){
-            ex.toString();
-        }
 
-    }
-    //listar jugadores sin Rxjava
-    public List<PlayerHistory> getAllJugadores(){
-        List<PlayerHistory> playerHistoryModelsList = new ArrayList<>();
-        String query = "SELECT * FROM "+TABLE_JUGADORES+ " ORDER BY "+ COLUMN_PUNTUACION+ " DESC ";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String nombre = cursor.getString(1);
-                int puntuacion = cursor.getInt(2);
-                String fechaStr = cursor.getString(3);
-
-                Date fecha = null;
-                PlayerHistory playerHistory = new PlayerHistory(id, nombre, puntuacion, fechaStr);
-                playerHistoryModelsList.add(playerHistory);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        return playerHistoryModelsList;
-    }
-
-    //top 3 mejores sin RXjava
-    public List<PlayerHistory> getTop3(){
-        List<PlayerHistory> playerHistoryModelsList = new ArrayList<>();
-        String query = "SELECT * FROM "+TABLE_JUGADORES+ " ORDER BY "+ COLUMN_PUNTUACION+ " DESC LIMIT 3 ";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String nombre = cursor.getString(1);
-                int puntuacion = cursor.getInt(2);
-                String fechaStr = cursor.getString(3);
-                PlayerHistory playerHistory = new PlayerHistory(id, nombre, puntuacion, fechaStr);
-                playerHistoryModelsList.add(playerHistory);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        return playerHistoryModelsList;
-    }
 }

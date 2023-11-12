@@ -2,6 +2,10 @@ package com.jose.diceroller;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
@@ -34,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnLanzar;
 
+    SoundPool soundPool;
+
+    int sonido;
+
 
     private Handler handler;//atributo para retrasar la aparción de los mensajes
 
@@ -46,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            createNewSoundPool();
+        } else {
+            createOldSoundPool();
+        }
 
         txtTiradas = findViewById(R.id.txtTiradas);
         String mensaje = "Tiradas Pendientes: " + String.valueOf(tiradas);
@@ -55,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         txtPuntuacion.setText(puntos);//mensaje de número de tiradas
         btnLanzar = findViewById(R.id.btnLanzar);
         txtFinalJuego = findViewById(R.id.txt_final_juego);
+
+        sonido = soundPool.load(this, R.raw.dados,1);
 
 
     }
@@ -201,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
         }else if (numero2 == 6) {
             diceImage2.setImageResource(R.drawable.dice_6);
         }
+        //llamamos al método del sonido de los dados
+        audiSoundPoll();
 
     }
 
@@ -236,6 +254,39 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+/*
+comienza la creación del SoundPool
+ */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void createNewSoundPool() {
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(attributes)
+                .build();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void createOldSoundPool() {
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    }
+
+    public void audiSoundPoll(){
+        soundPool.play(sonido, 1.0f, 1.0f, 1, 0, 1.0f);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (soundPool != null) {
+            soundPool.release();
+        }
+        super.onDestroy();
     }
 
 }
