@@ -20,12 +20,6 @@
             android:name=".RecyclerView"
             android:exported="false" />
         <activity
-            android:name=".VentanaTodosRegistros"
-            android:exported="false" />
-        <activity
-            android:name=".VentanaPuntuaciones"
-            android:exported="false" />
-        <activity
             android:name=".VentanaAyuda"
             android:exported="false" />
         <activity
