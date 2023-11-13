@@ -36,12 +36,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_top3" />
 
     <Button
-        android:id="@+id/btn_ayuda"
+        android:id="@+id/btn_jugar"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/blue"
-        android:text="@string/ayuda"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="@color/green"
+        android:text="@string/jugar"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,23 +49,10 @@
         app:layout_constraintTop_toBottomOf="@+id/listTopThree" />
 
     <Button
-        android:id="@+id/btn_jugar"
-        android:layout_width="261dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="14dp"
-        android:backgroundTint="@color/green"
-        android:text="@string/jugar"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_ayuda" />
-
-    <Button
         android:id="@+id/btn_salir_juego"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="@color/red"
         android:text="@string/salir"
         android:textSize="20sp"

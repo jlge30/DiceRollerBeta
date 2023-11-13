@@ -1,7 +1,6 @@
 package com.jose.diceroller;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -11,9 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -32,7 +29,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MenuInicial extends AppCompatActivity {
 
     //atributos
-    private Button btnJugar, btnayuda, btnSalir;
+    private Button btnJugar, btnSalir;
 
     private DbManager dbManager;//instancia gestíon de la BBDD
     private TextView txtTopThree;
@@ -47,7 +44,6 @@ public class MenuInicial extends AppCompatActivity {
         btnJugar = findViewById(R.id.btn_jugar);
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);
-        btnayuda = findViewById(R.id.btn_ayuda);
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
@@ -65,15 +61,6 @@ public class MenuInicial extends AppCompatActivity {
                 finish();
             }
         });
-        //boton menú ayuda
-        btnayuda.setOnClickListener(new View.OnClickListener() {//pasar a la ventana ayuda
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(MenuInicial.this, VentanaAyuda.class);
-                startActivity(intent);
-            }
-        });
 
     }
     //añadimos el menu a la barra de herramientas
@@ -86,11 +73,12 @@ public class MenuInicial extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         int id = item.getItemId();
-        if ( id == R.id.menu_borrarBD){
-            mostrarDialogoDeConfirmacion();
-//            eliminarRegistros();
-//            finish();
-            //Toast.makeText(this, "Has clicado la primera opcion", Toast.LENGTH_SHORT).show();
+        if ( id == R.id.menu_ajustes){
+
+            Intent intent = new Intent(MenuInicial.this,Ajustes.class);
+            startActivity(intent);
+            finish();
+
         }else if ( id == R.id.menu_ayuda){
             Intent intent = new Intent(MenuInicial.this,VentanaAyuda.class);
             startActivity(intent);
@@ -107,56 +95,6 @@ public class MenuInicial extends AppCompatActivity {
     }
 
 
-
-
-    //funcion eliminación BBDD con RxJava
-    @SuppressLint("CheckResult")
-    public void eliminarRegistros(){
-        dbManager.deleteAllJugadores()
-                .subscribe(deletedRows -> {
-                    if (deletedRows > 0) {
-                        Toast.makeText(MenuInicial.this, "Registros eliminados correctamente",
-                                Toast.LENGTH_SHORT).show();
-                        // Todos los registros se eliminaron con éxito
-                    } else {
-                        Toast.makeText(MenuInicial.this, "Registros no eliminados",
-                                Toast.LENGTH_SHORT).show();
-                        // No se encontraron registros para eliminar
-                    }
-                }, throwable -> {
-                    Toast.makeText(MenuInicial.this, "Error en la eliminacion",
-                            Toast.LENGTH_SHORT).show();
-                    // Ocurrió un error durante la eliminación
-                });
-
-        Intent intent = new Intent(MenuInicial.this,MenuInicial.class);
-        startActivity(intent);
-
-    }
-    //función para confirmar la eliminación de todos los registros de la BBDD
-    private void mostrarDialogoDeConfirmacion() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirmación");
-        builder.setMessage("¿Estás seguro de que deseas eliminar todos los registros?");
-
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Código para la acción afirmativa
-                eliminarRegistros();
-                finish();
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.show();
-    }
     //función listar jugadores con RxJava
     public void listarTopThree() {
         dbManager.getTopThree()
