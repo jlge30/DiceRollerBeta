@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_borrarBD"
-        android:title="@string/borrarBD" />
-    <item
         android:id="@+id/menu_ver_all"
         android:title="@string/vertodosregistros" />
+    <item
+        android:id="@+id/menu_ajustes"
+        android:title="@string/ajustes" />
     <item
         android:id="@+id/menu_ayuda"
         android:title="@string/ayuda" />

@@ -12,10 +12,10 @@ import io.reactivex.rxjava3.core.Single;
 
 public class DbManager {
 
-    private DbHelper1 dbHelper;
+    private DbHelper dbHelper;
 
     public DbManager(Context context) {
-        dbHelper= new DbHelper1(context);//instanciamos la clase DbHelper para manipular la BBDD con Sqlite
+        dbHelper= new DbHelper(context);//instanciamos la clase DbHelper para manipular la BBDD con Sqlite
     }
     //insercion del jugador con RXJava
     public Single<Long> insertJugador(String nombre, int puntuacion, String fecha) {
