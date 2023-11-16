@@ -132,7 +132,7 @@ public class MenuInicial extends AppCompatActivity {
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MenuInicial.this));
                         recyclerView.setAdapter(listAdapter);
-
+                        
                     }
 
                     @Override
