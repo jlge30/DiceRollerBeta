@@ -1,5 +1,6 @@
 package com.jose.diceroller;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioAttributes;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int tiradas = 10;
 
+    @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setTheme(R.style.SplashTeme);

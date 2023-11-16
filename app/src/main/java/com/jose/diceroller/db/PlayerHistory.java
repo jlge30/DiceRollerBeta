@@ -7,10 +7,22 @@ public class PlayerHistory {
     public static final String COLUMN_NOMBRE = "nombre";
     public static final String COLUMN_PUNTUACION = "puntuacion";
     public static final String COLUMN_FECHA = "fecha";
+
+    public static final String COLUMN_LATITUD = "latitud";
+
+    public static final String COLUMN_LONGITUD = "longitud";
+
+
+
+
     private int id;
     private String nombre;
     private int puntuacion;
     private String fecha;
+
+    private double latitud;
+
+    private double longitud;
 
     //constructores
     public PlayerHistory(){
@@ -27,6 +39,31 @@ public class PlayerHistory {
         this.nombre = nombre;
         this.puntuacion = puntuacion;
         this.fecha = fecha;
+    }
+
+    public PlayerHistory(int id, String nombre, int puntuacion, String fecha, double latitud, double longitud) {
+        this.id = id;
+        this.nombre = nombre;
+        this.puntuacion = puntuacion;
+        this.fecha = fecha;
+        this.latitud = latitud;
+        this.longitud = longitud;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
 
     public int getId() {
@@ -70,5 +107,6 @@ public class PlayerHistory {
                 ", fecha=" + fecha +
                 '}';
     }
+
 
 }

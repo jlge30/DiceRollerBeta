@@ -42,6 +42,7 @@ public class PantallaFinal extends AppCompatActivity {
     private DbManager dbManager;
 
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,6 @@ public class PantallaFinal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantalla_final);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         dbManager = new DbManager(this);
         textView = findViewById(R.id.txt_puntos);//localizamos el txt de los puntos
         gamerN = findViewById(R.id.txtGamerN);
@@ -59,14 +59,15 @@ public class PantallaFinal extends AppCompatActivity {
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
-
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
+
                 if (gamerN.getText().toString().isEmpty()){//comprobamos que la caja de texto nombre tiene datos
                     Toast.makeText(PantallaFinal.this, "Introduce el nombre", Toast.LENGTH_SHORT).show();
                 }else {
+
                     insertJugadorRx();
                     gamerN.setText("");//vaciamos la caja de texto
                     datos.setPuntuacion(0);//dejamos la puntuación a 0
@@ -76,23 +77,6 @@ public class PantallaFinal extends AppCompatActivity {
                 }
 
 
-
-
-//                DbHelper dbHelper = new DbHelper(PantallaFinal.this);
-//                SQLiteDatabase db =dbHelper.getWritableDatabase();
-//                if(db != null){
-//
-//                    LocalDate horaActual = LocalDate.now();
-//                    String name = gamerN.getText().toString();
-//                    int puntos = datos.getPuntuacion();
-//                    DataItem jugador = new DataItem(name, horaActual, puntos);
-//                    dbHelper.subirPuntuacion(jugador, PantallaFinal.this);
-//                    Intent intent = new Intent(PantallaFinal.this, VentanaPuntuaciones.class);
-//                    startActivity(intent);
-//                    finish();
-//                }else{
-//                    Toast.makeText(PantallaFinal.this, "Error al acceder a la bd", Toast.LENGTH_LONG).show();
-//                }
             }
         });
         //botón salir
@@ -120,8 +104,10 @@ public class PantallaFinal extends AppCompatActivity {
         Date fecha = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Ajusta el formato
         String fechaStr = dateFormat.format(fecha);
+        double latitud = datos.getLatitud();
+        double longitud = datos.getLongitud();
 
-        dbManager.insertJugador(nombre, puntuacion, fechaStr)
+        dbManager.insertJugador(nombre, puntuacion, fechaStr, latitud, longitud)
                 .subscribeOn(Schedulers.io()) // Ejecuta la inserción en un hilo diferente
                 .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
                 .subscribe(new SingleObserver<Long>() {
@@ -168,4 +154,6 @@ public class PantallaFinal extends AppCompatActivity {
         return true;
     }
 
+
 }
+

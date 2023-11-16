@@ -18,12 +18,14 @@ public class DbManager {
         dbHelper= new DbHelper(context);//instanciamos la clase DbHelper para manipular la BBDD con Sqlite
     }
     //insercion del jugador con RXJava
-    public Single<Long> insertJugador(String nombre, int puntuacion, String fecha) {
+    public Single<Long> insertJugador(String nombre, int puntuacion, String fecha, double latitud, double longitud) {
         return Single.fromCallable(() -> {
             ContentValues values = new ContentValues();
             values.put(PlayerHistory.COLUMN_NOMBRE, nombre);
             values.put(PlayerHistory.COLUMN_PUNTUACION, puntuacion);
             values.put(PlayerHistory.COLUMN_FECHA, fecha);
+            values.put(PlayerHistory.COLUMN_LATITUD, latitud);
+            values.put(PlayerHistory.COLUMN_LONGITUD, longitud);
             long id = dbHelper.getWritableDatabase().insert(PlayerHistory.TABLE_JUGADORES, null, values);
             dbHelper.close();
             return id;
@@ -41,13 +43,18 @@ public class DbManager {
                 int nameIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_NOMBRE);
                 int scoreIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_PUNTUACION);
                 int fechaIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_FECHA);
+                int latituIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_LATITUD);
+                int longitudIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_LONGITUD);
                 do {
                     if(idIndex != -1 && nameIndex != -1 && scoreIndex != -1 && fechaIndex != -1 ){
                         int id = cursor.getInt(idIndex);
                         String nombre = cursor.getString(nameIndex);
                         int score = cursor.getInt(scoreIndex);
                         String fecha = cursor.getString(fechaIndex);
-                        PlayerHistory playerHistory = new PlayerHistory(id, nombre, score, fecha);
+                        double latitud = cursor.getDouble(latituIndex);
+                        double longitud = cursor.getDouble(longitudIndex);
+
+                        PlayerHistory playerHistory = new PlayerHistory(id, nombre, score, fecha, latitud, longitud);
                         jugadores.add(playerHistory);
                     }
                 } while (cursor.moveToNext());
@@ -76,13 +83,17 @@ public class DbManager {
                 int nameIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_NOMBRE);
                 int scoreIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_PUNTUACION);
                 int fechaIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_FECHA);
+                int latituIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_LATITUD);
+                int longitudIndex = cursor.getColumnIndex(PlayerHistory.COLUMN_LONGITUD);
                 do {
                     if(idIndex != -1 && nameIndex != -1 && scoreIndex != -1 && fechaIndex != -1 ){
                         int id = cursor.getInt(idIndex);
                         String nombre = cursor.getString(nameIndex);
                         int score = cursor.getInt(scoreIndex);
                         String fecha = cursor.getString(fechaIndex);
-                        PlayerHistory playerHistory = new PlayerHistory(id, nombre, score, fecha);
+                        double latitud = cursor.getDouble(latituIndex);
+                        double longitud = cursor.getDouble(longitudIndex);
+                        PlayerHistory playerHistory = new PlayerHistory(id, nombre, score, fecha, latitud, longitud);
                         jugadores.add(playerHistory);//añadimos los jugadores
                     }
                 } while (cursor.moveToNext());
