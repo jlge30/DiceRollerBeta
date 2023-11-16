@@ -60,8 +60,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             name.setText(item.getNombre());
             puntuacion.setText("Monedas: " +(String.valueOf(item.getPuntuacion())));
             fecha.setText(item.getFecha());
-            latitud.setText("Lat: "+(String.valueOf(item.getLatitud())));
-            longitud.setText("Long: "+(String.valueOf(item.getLongitud())));
+            // Usar DecimalFormat para limitar a 5 dígitos
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#.######");
+            latitud.setText("Lat: " + df.format(item.getLatitud()));
+            longitud.setText("Long: " + df.format(item.getLongitud()));
         }
     }
 }

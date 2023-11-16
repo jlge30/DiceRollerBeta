@@ -106,7 +106,6 @@ public class PantallaFinal extends AppCompatActivity {
         String fechaStr = dateFormat.format(fecha);
         double latitud = datos.getLatitud();
         double longitud = datos.getLongitud();
-
         dbManager.insertJugador(nombre, puntuacion, fechaStr, latitud, longitud)
                 .subscribeOn(Schedulers.io()) // Ejecuta la inserción en un hilo diferente
                 .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
