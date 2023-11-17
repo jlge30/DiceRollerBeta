@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DbHelper extends SQLiteOpenHelper {
     //atributos
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NOMBRE = "jugador.db";
     private static final String TABLE_JUGADORES = "jugadores";
 
@@ -17,6 +17,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String COLUMN_NOMBRE = "nombre";
     private static final String COLUMN_PUNTUACION = "puntuacion";
     private static final String COLUMN_FECHA = "fecha";
+
+    private static final String COLUMN_LATITUD = "latitud";
+
+    private static final String COLUMN_LONGITUD = "longitud";
 
     public PlayerHistory playerHistory;
     public Context context;
@@ -28,7 +32,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_NOMBRE + " TEXT NOT NULL,"+
                 COLUMN_PUNTUACION + " INTEGER NOT NULL, " +
-                COLUMN_FECHA + " TEXT NOT NULL)");
+                COLUMN_FECHA + " TEXT NOT NULL, " +
+                COLUMN_LATITUD + " DECIMAL, " +
+                COLUMN_LONGITUD + " DECIMAL)");
 
     }
 

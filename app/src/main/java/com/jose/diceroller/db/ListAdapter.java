@@ -43,7 +43,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView name, puntuacion, fecha, id;
+        TextView name, puntuacion, fecha, id, latitud, longitud;
         ViewHolder(View itemView){
             super(itemView);
 
@@ -51,12 +51,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.nameTextView);
             puntuacion = itemView.findViewById(R.id.puntuacionTextView);
             fecha = itemView.findViewById(R.id.fechaTextView);
+            latitud = itemView.findViewById(R.id.latitudTextView);
+            longitud = itemView.findViewById(R.id.longitudTextView);
+
         }
         void bindData(final PlayerHistory item){
             id.setText("Id: "+(String.valueOf(item.getId())));
             name.setText(item.getNombre());
             puntuacion.setText("Monedas: " +(String.valueOf(item.getPuntuacion())));
             fecha.setText(item.getFecha());
+            // Usar DecimalFormat para limitar a 5 dígitos
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#.######");
+            latitud.setText("Lat: " + df.format(item.getLatitud()));
+            longitud.setText("Long: " + df.format(item.getLongitud()));
         }
     }
 }

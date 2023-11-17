@@ -1,5 +1,6 @@
 package com.jose.diceroller;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioAttributes;
@@ -39,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnLanzar;
 
-    SoundPool soundPool;
+    /*
+    Clase SoundPool para asociar al giro de los dados
+     */
+    private SoundPool soundPool;
 
     int sonido;
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int tiradas = 10;
 
+    @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setTheme(R.style.SplashTeme);
@@ -85,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
         llamamos a la variables globales
          */
         datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
-        //Toast.makeText(this, R.string.lanzar, Toast.LENGTH_SHORT).show();
-//        resultado1 = findViewById(R.id.txt1);
-//        resultado2 = findViewById(R.id.txt2);
+
         /*
         Imagenes iniciales que creamos para alojar los dados
          */

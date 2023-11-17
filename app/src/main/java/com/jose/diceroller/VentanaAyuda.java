@@ -3,36 +3,29 @@ package com.jose.diceroller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class VentanaAyuda extends AppCompatActivity {
+    private WebView webView;
 
-    private Button btnVolver;
-    @SuppressLint("MissingInflatedId")
+     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventana_ayuda);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        webView = findViewById(R.id.web_view_ayuda);
+        new CargarHtmlTask().execute();//iniciamos la carga del html en otro hilo
 
-        btnVolver = findViewById(R.id.btn_inicio_ayuda);
-        btnVolver.setOnClickListener(new View.OnClickListener() {
-            @Override
 
-            public void onClick(View v) {//volvemos al menú inicial
-                Intent intent = new Intent(VentanaAyuda.this, MenuInicial.class);
-                startActivity(intent);
-                finish();
-
-            }
-        });
     }
     //añadimos al menu
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,4 +49,30 @@ public class VentanaAyuda extends AppCompatActivity {
         }
         return true;
     }
+/*
+función para creaar la tarea
+ */
+    private class CargarHtmlTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            cargarHtml();
+            return null;
+        }
+    }
+/*
+función de la carga del html en segundo plano
+ */
+    public void cargarHtml() {
+        String url = "file:///android_asset/ayuda.html";//ruta del html en la app
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.setWebViewClient(new WebViewClient());
+                webView.loadUrl(url);
+            }
+        });
+    }
+
+
 }
