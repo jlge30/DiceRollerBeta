@@ -60,13 +60,14 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
 
-        if (checkLocationPermission()) {
+        if (checkLocationPermission()) { obtainLocation();
             // Para ejecutar la tarea en segundo plano
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                new LocationTask().execute();
-            }
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                new LocationTask().execute();
+//            }
         } else {
             requestLocationPermission();
         }

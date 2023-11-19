@@ -43,6 +43,7 @@ import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class PantallaFinal extends AppCompatActivity {
 
     private TextView textView;
@@ -71,6 +72,7 @@ public class PantallaFinal extends AppCompatActivity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,11 +197,11 @@ public class PantallaFinal extends AppCompatActivity {
         CharSequence format = DateFormat.getDateInstance().format("yyyy-MM-dd_hh:mm:ss");
         try {
             String directoryPath = Environment.getExternalStorageDirectory().toString() + "/dashrolls";
-            File directorioDashrolls = new File(Environment.getExternalStorageDirectory(), "dashrolls");
+            File directorioDashrolls = new File(Environment.getExternalStorageDirectory(), "/dashrolls");
             if (!directorioDashrolls.exists()) {
                 directorioDashrolls.mkdirs();
             }
-            String path = directoryPath + "/" + filename + "-" + ".jpg";
+            String path = directoryPath + "/" + filename + ".jpg";
             view.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
             view.setDrawingCacheEnabled(false);
