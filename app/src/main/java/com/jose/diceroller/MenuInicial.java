@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,13 +59,14 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
 
-        if (checkLocationPermission()) {
-            // Para ejecutar la tarea en segundo plano
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                new LocationTask().execute();
-            }
+
+        if (checkLocationPermission()) { obtainLocation();
+//            // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                new LocationTask().execute();
+//            }
         } else {
             requestLocationPermission();
         }
