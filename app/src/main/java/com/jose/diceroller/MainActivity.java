@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     /*
     Atributos para generar un numero aleatorio
      */
+    private MediaPlayer mediaPlayer;
     private Random random1 = new Random();
     private Random random2 = new Random();
     private TextView txtMensaje;
@@ -77,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
         sonido = soundPool.load(this, R.raw.dados,1);
 
-
+        //MUSICA:
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica02);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
     }
 
 
@@ -289,7 +295,45 @@ comienza la creación del SoundPool
         if (soundPool != null) {
             soundPool.release();
         }
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
+        // Restaurar la configuración de Live Caption al cerrar la aplicación
+        enableLiveCaption();
         super.onDestroy();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+
+            // Desactivar Live Caption mientras se reproduce música
+            disableLiveCaption();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+
+            // Restaurar la configuración de Live Caption cuando la música se pausa
+            enableLiveCaption();
+        }
+    }
+
+    // Método para desactivar Live Caption
+    private void disableLiveCaption() {
+        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 0);
+    }
+
+    // Método para restaurar la configuración de Live Caption
+    private void enableLiveCaption() {
+        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 1);
     }
 
 }

@@ -8,8 +8,11 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +39,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MenuInicial extends AppCompatActivity {
 
+    private MediaPlayer mediaPlayer;
+
     //atributos
     private Button btnJugar, btnSalir;
 
@@ -59,17 +64,23 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
 
+        //MUSICA:
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica01);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
+/*
         if (checkLocationPermission()) { obtainLocation();
-//            // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//            } else {
-//                new LocationTask().execute();
-//            }
+            // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+               new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                new LocationTask().execute();
+           }
         } else {
             requestLocationPermission();
         }
+        */
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
@@ -151,6 +162,7 @@ public class MenuInicial extends AppCompatActivity {
     /**
      * función para obtener localización.
      */
+    /*
     @SuppressLint("SetTextI18n")
     private void obtainLocation(){
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -187,6 +199,7 @@ public class MenuInicial extends AppCompatActivity {
         }
     }
 
+
     //función asincrona para llamar a la funcion de localización.
     private class LocationTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -196,5 +209,34 @@ public class MenuInicial extends AppCompatActivity {
             return null;
         }
     }
+    */
+/*
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+
+        }
+    }*/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+        mediaPlayer=null;
+    }
+
 
 }

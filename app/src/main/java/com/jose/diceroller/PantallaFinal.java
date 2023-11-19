@@ -3,8 +3,10 @@ package com.jose.diceroller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +43,7 @@ public class PantallaFinal extends AppCompatActivity {
 
     private DbManager dbManager;
 
-
+    private MediaPlayer mediaPlayer;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -59,6 +61,12 @@ public class PantallaFinal extends AppCompatActivity {
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
+
+        //MUSICA:
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica03);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -83,12 +91,28 @@ public class PantallaFinal extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+
+                // Restaurar la configuración de Live Caption al cerrar la aplicación
+                enableLiveCaption();
                 finish();
+
             }
         });
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+
+                // Restaurar la configuración de Live Caption al cerrar la aplicación
+                enableLiveCaption();
+
                 Intent intent = new Intent(PantallaFinal.this, MenuInicial.class);
                 startActivity(intent);
                 finish();
@@ -153,6 +177,47 @@ public class PantallaFinal extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+
+            // Desactivar Live Caption mientras se reproduce música
+            disableLiveCaption();
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+
+            // Restaurar la configuración de Live Caption cuando la música se pausa
+            enableLiveCaption();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
+        // Restaurar la configuración de Live Caption al cerrar la aplicación
+        enableLiveCaption();
+    }
+
+    // Método para desactivar Live Caption
+    private void disableLiveCaption() {
+        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 0);
+    }
+
+    // Método para restaurar la configuración de Live Caption
+    private void enableLiveCaption() {
+        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 1);
+    }
 
 }
 
