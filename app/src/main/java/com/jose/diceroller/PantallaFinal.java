@@ -43,7 +43,6 @@ public class PantallaFinal extends AppCompatActivity {
 
     private DbManager dbManager;
 
-    private MediaPlayer mediaPlayer;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -62,10 +61,6 @@ public class PantallaFinal extends AppCompatActivity {
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
 
-        //MUSICA:
-        mediaPlayer = MediaPlayer.create(this, R.raw.musica03);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
 
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -91,13 +86,6 @@ public class PantallaFinal extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (mediaPlayer != null) {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                }
-
-                // Restaurar la configuración de Live Caption al cerrar la aplicación
-                enableLiveCaption();*/
                 finish();
 
             }
@@ -105,23 +93,12 @@ public class PantallaFinal extends AppCompatActivity {
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                if (mediaPlayer != null) {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                }
-
-                // Restaurar la configuración de Live Caption al cerrar la aplicación
-                enableLiveCaption();
-                */
                 Intent intent = new Intent(PantallaFinal.this, MenuInicial.class);
                 startActivity(intent);
                 finish();
             }
         });
-
     }
-
     //Insertar jugador con RxJava
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
@@ -139,7 +116,6 @@ public class PantallaFinal extends AppCompatActivity {
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
-
                     @Override
                     public void onSuccess(@NonNull Long id) {
                         // La inserción fue exitosa, puedes manejar el resultado aquí (id es la clave primaria generada)
@@ -176,29 +152,6 @@ public class PantallaFinal extends AppCompatActivity {
             finish();
         }
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
-        }
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-        }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
     }
 
 }

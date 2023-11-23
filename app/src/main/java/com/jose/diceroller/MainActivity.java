@@ -3,6 +3,7 @@ package com.jose.diceroller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,14 +12,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
     private int tiradas = 10;
 
+
+
+    private ImageButton musicaMenuPrincipal;
+    private Button btnClosePopup;
+    private PopupWindow popupWindow;
+
+
+
+
     @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +93,78 @@ public class MainActivity extends AppCompatActivity {
         txtPuntuacion.setText(puntos);//mensaje de número de tiradas
         btnLanzar = findViewById(R.id.btnLanzar);
         txtFinalJuego = findViewById(R.id.txt_final_juego);
-
+        musicaMenuPrincipal=findViewById(R.id.musicaMenuPrincipal);
         sonido = soundPool.load(this, R.raw.dados,1);
 
         //MUSICA:
         mediaPlayer = MediaPlayer.create(this, R.raw.musica02);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
+        musicaMenuPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup();
+            }
+        });
+    }
+
+    private void showPopup() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_menu_musica, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // Permite el clic fuera del Popup para cerrarlo
+
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // Configurar un fondo translúcido
+        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(android.R.color.transparent));
+        popupWindow.setBackgroundDrawable(colorDrawable);
+
+        // Animación para entrar (puedes ajustarla según tus preferencias)
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+        // Mostrar el Popup en el centro de la pantalla
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+        Button btn_musica01 = popupView.findViewById(R.id.btn_musica01);
+        btn_musica01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cambiar la canción cuando se hace clic en el botón dentro del popup
+                playSong(R.raw.musica01);
+                Toast.makeText(MainActivity.this, "Canción 01", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Button btn_musica02 = popupView.findViewById(R.id.btn_musica02);
+        btn_musica02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cambiar la canción cuando se hace clic en el botón dentro del popup
+                playSong(R.raw.musica02);
+                Toast.makeText(MainActivity.this, "Canción 02", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Button btn_musica03 = popupView.findViewById(R.id.btn_musica03);
+        btn_musica03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cambiar la canción cuando se hace clic en el botón dentro del popup
+                playSong(R.raw.musica03);
+                Toast.makeText(MainActivity.this, "Canción 03", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Configurar el botón de cerrar en el Popup
+        btnClosePopup = popupView.findViewById(R.id.btn_menuMusicaCancelar);
+        btnClosePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
     }
 
 
@@ -280,6 +361,16 @@ comienza la creación del SoundPool
                 .build();
     }
 
+    private void playSong(int songId) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+        mediaPlayer = MediaPlayer.create(this, songId);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+    }
+
     @SuppressWarnings("deprecation")
     private void createOldSoundPool() {
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
@@ -288,6 +379,7 @@ comienza la creación del SoundPool
     public void audiSoundPoll(){
         soundPool.play(sonido, 1.0f, 1.0f, 1, 0, 1.0f);
     }
+
 
     @Override
     protected void onDestroy() {

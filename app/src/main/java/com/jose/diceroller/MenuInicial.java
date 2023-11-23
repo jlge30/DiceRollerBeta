@@ -39,7 +39,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MenuInicial extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
 
     //atributos
     private Button btnJugar, btnSalir;
@@ -64,10 +63,6 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
 
-        //MUSICA:
-        mediaPlayer = MediaPlayer.create(this, R.raw.musica01);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
 
 /*
         if (checkLocationPermission()) { obtainLocation();
@@ -158,7 +153,6 @@ public class MenuInicial extends AppCompatActivity {
                     }
                 });
     }
-
     /**
      * función para obtener localización.
      */
@@ -198,8 +192,6 @@ public class MenuInicial extends AppCompatActivity {
             }
         }
     }
-
-
     //función asincrona para llamar a la funcion de localización.
     private class LocationTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -210,33 +202,4 @@ public class MenuInicial extends AppCompatActivity {
         }
     }
     */
-/*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
-
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-
-        }
-    }*/
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-        mediaPlayer=null;
-    }
-
-
 }
