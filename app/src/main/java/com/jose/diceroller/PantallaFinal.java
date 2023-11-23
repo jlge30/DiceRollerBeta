@@ -91,13 +91,13 @@ public class PantallaFinal extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mediaPlayer != null) {
+                /*if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer.release();
                 }
 
                 // Restaurar la configuración de Live Caption al cerrar la aplicación
-                enableLiveCaption();
+                enableLiveCaption();*/
                 finish();
 
             }
@@ -105,6 +105,7 @@ public class PantallaFinal extends AppCompatActivity {
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer.release();
@@ -112,7 +113,7 @@ public class PantallaFinal extends AppCompatActivity {
 
                 // Restaurar la configuración de Live Caption al cerrar la aplicación
                 enableLiveCaption();
-
+                */
                 Intent intent = new Intent(PantallaFinal.this, MenuInicial.class);
                 startActivity(intent);
                 finish();
@@ -182,9 +183,6 @@ public class PantallaFinal extends AppCompatActivity {
         super.onResume();
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-
-            // Desactivar Live Caption mientras se reproduce música
-            disableLiveCaption();
         }
     }
     @Override
@@ -192,9 +190,6 @@ public class PantallaFinal extends AppCompatActivity {
         super.onPause();
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-
-            // Restaurar la configuración de Live Caption cuando la música se pausa
-            enableLiveCaption();
         }
     }
     @Override
@@ -204,19 +199,6 @@ public class PantallaFinal extends AppCompatActivity {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
-
-        // Restaurar la configuración de Live Caption al cerrar la aplicación
-        enableLiveCaption();
-    }
-
-    // Método para desactivar Live Caption
-    private void disableLiveCaption() {
-        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 0);
-    }
-
-    // Método para restaurar la configuración de Live Caption
-    private void enableLiveCaption() {
-        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 1);
     }
 
 }
