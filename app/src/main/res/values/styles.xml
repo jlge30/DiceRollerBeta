@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/styles.xml -->
 <resources>
-
     <style name="FinalPage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="PopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 </resources>

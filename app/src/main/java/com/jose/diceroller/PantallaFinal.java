@@ -3,8 +3,10 @@ package com.jose.diceroller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +44,6 @@ public class PantallaFinal extends AppCompatActivity {
     private DbManager dbManager;
 
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class PantallaFinal extends AppCompatActivity {
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
+
+
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -84,6 +87,7 @@ public class PantallaFinal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
         btnInicio.setOnClickListener(new View.OnClickListener() {
@@ -94,9 +98,7 @@ public class PantallaFinal extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
     //Insertar jugador con RxJava
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
@@ -114,7 +116,6 @@ public class PantallaFinal extends AppCompatActivity {
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
-
                     @Override
                     public void onSuccess(@NonNull Long id) {
                         // La inserción fue exitosa, puedes manejar el resultado aquí (id es la clave primaria generada)
@@ -152,7 +153,6 @@ public class PantallaFinal extends AppCompatActivity {
         }
         return true;
     }
-
 
 }
 

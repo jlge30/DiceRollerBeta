@@ -20,6 +20,9 @@
             android:name=".Ajustes"
             android:exported="false" />
         <activity
+            android:name=".AjustesMusica"
+            android:exported="false" />
+        <activity
             android:name=".RecyclerView"
             android:exported="false" />
         <activity
