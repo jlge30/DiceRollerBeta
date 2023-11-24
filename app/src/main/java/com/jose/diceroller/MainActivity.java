@@ -393,7 +393,7 @@ comienza la creación del SoundPool
         }
 
         // Restaurar la configuración de Live Caption al cerrar la aplicación
-        enableLiveCaption();
+        //enableLiveCaption();
         super.onDestroy();
     }
     @Override
@@ -403,7 +403,7 @@ comienza la creación del SoundPool
             mediaPlayer.start();
 
             // Desactivar Live Caption mientras se reproduce música
-            disableLiveCaption();
+            //disableLiveCaption();
         }
     }
 
@@ -414,9 +414,9 @@ comienza la creación del SoundPool
             mediaPlayer.pause();
 
             // Restaurar la configuración de Live Caption cuando la música se pausa
-            enableLiveCaption();
+            //enableLiveCaption();
         }
-    }
+    }/*
 
     // Método para desactivar Live Caption
     private void disableLiveCaption() {
@@ -426,6 +426,6 @@ comienza la creación del SoundPool
     // Método para restaurar la configuración de Live Caption
     private void enableLiveCaption() {
         Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 1);
-    }
+    }*/
 
 }

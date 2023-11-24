@@ -64,7 +64,7 @@ public class MenuInicial extends AppCompatActivity {
         listarTopThree();
 
 
-/*
+
         if (checkLocationPermission()) { obtainLocation();
             // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -75,7 +75,7 @@ public class MenuInicial extends AppCompatActivity {
         } else {
             requestLocationPermission();
         }
-        */
+
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
@@ -156,7 +156,7 @@ public class MenuInicial extends AppCompatActivity {
     /**
      * función para obtener localización.
      */
-    /*
+
     @SuppressLint("SetTextI18n")
     private void obtainLocation(){
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -201,5 +201,5 @@ public class MenuInicial extends AppCompatActivity {
             return null;
         }
     }
-    */
+
 }
