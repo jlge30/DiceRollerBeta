@@ -1,21 +1,26 @@
 package com.jose.diceroller;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,10 +61,13 @@ public class PantallaFinal extends AppCompatActivity {
     View vista;
     private DbManager dbManager;
 
+    public static final int REQUEST_CODE_PERMISSIONS = 1;
+
     private static final int REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO = 2;
     private static final int REQUEST_CODE_PERMISO_UBICACION_MEDIOS = 1;
     private static final int REQUEST_CODE_PERMISO_ESCRIBIR_EXT = 2;
 
+    public Activity activity = this;
     private static final String[] PERMISSION = {
             Manifest.permission.ACCESS_MEDIA_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -102,17 +110,20 @@ public class PantallaFinal extends AppCompatActivity {
 
                 if (gamerN.getText().toString().isEmpty()){//comprobamos que la caja de texto nombre tiene datos
                     Toast.makeText(PantallaFinal.this, "Introduce el nombre", Toast.LENGTH_SHORT).show();
+                    Bitmap capture = createScreenshot();
+                    takeScreenCapture(activity, capture);
+
                     createFile(getWindow().getDecorView().getRootView(), "result");
                 }else {
-
+                    Bitmap capture = createScreenshot();
                     insertJugadorRx();
                     gamerN.setText("");//vaciamos la caja de texto
                     datos.setPuntuacion(0);//dejamos la puntuación a 0
                     textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
                     txtPuntuacion.setVisibility(View.INVISIBLE);
                     saveName.setEnabled(false);//deshabilitamos el botón de guardar
-                    //createFile(getWindow().getDecorView().getRootView(), "result");
-                    tomarCapturaDePantalla();
+                    takeScreenCapture(activity, capture);
+
                 }
 
 
@@ -291,6 +302,117 @@ public class PantallaFinal extends AppCompatActivity {
 
     }
 
+    public Bitmap pantallazo(){
+        try {
+            // crear un bitmap con la captura de pantalla
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+            return bitmap;
+        } catch (Throwable e) {
+            // Several error may come out with file handling or OOM
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+//    private void saveScreenshot(Bitmap bitmap) {
+//        Date now = new Date();
+//        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+//
+//        try {
+//            // nombre y ruta de la imagen a incluir
+//            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+//            System.out.println(mPath);
+//            File imageFile = new File(mPath);
+//
+//            FileOutputStream outputStream = new FileOutputStream(imageFile);
+//            int quality = 100;
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+//            outputStream.flush();
+//            outputStream.close();
+//
+//        } catch (Throwable e) {
+//            // Captura los distintos errores que puedan surgir
+//            e.printStackTrace();
+//        }
+//    }
+
+//    public void savescreentotogallery(View view, String fileName){
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+//        values.put(MediaStore.Images.Media.MIME_TYPE,"image/jpeg");
+//        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis()/1000);
+//        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+//        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/screenshots");
+//        if (ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.MEDIA_CONTENT_CONTROL) != PackageManager.PERMISSION_GRANTED)
+//        }
+//    }
+
+
+    public Bitmap createScreenshot() {
+        // Obtener la ventana raíz
+        Window window = getWindow();
+
+        // Obtener el tamaño de la pantalla
+        int width = window.getDecorView().getWidth();
+        int height = window.getDecorView().getHeight();
+
+        // Crear una nueva imagen
+        Bitmap screenshot = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Crear un nuevo lienzo
+        Canvas canvas = new Canvas(screenshot);
+
+        // Capturar la pantalla
+        window.getDecorView().draw(canvas);
+
+        return screenshot;
+    }
+
+    public void takeScreenCapture(Activity activity, Bitmap screenshot) {
+        // 1. Solicitar permisos
+
+        String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
+        if (activity.checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED) {
+            activity.requestPermissions(permissions, REQUEST_CODE_PERMISSIONS);
+
+        }
+
+        // 2. Crear carpeta
+
+        File diceRollerFolder = new File(
+                activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                "DiceRoller"
+        );
+        if (!diceRollerFolder.exists()) {
+            diceRollerFolder.mkdirs();
+        }
+
+
+        if (screenshot == null) {
+            // Maneja el error
+            Log.e("PantallaFinal", "Falló al tomar la captura de pantalla");
+            return;
+        }
+
+        // Guarda la captura de pantalla en un archivo
+        try {
+            FileOutputStream outputStream = new FileOutputStream(new File(
+                    activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    String.format("dr_%s.jpg", new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()))
+            ));
+            screenshot.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e("PantallaFinal", "Falló al guardar la captura de pantalla", e);
+        }
+    }
 }
 
