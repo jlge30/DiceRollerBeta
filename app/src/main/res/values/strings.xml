@@ -33,5 +33,13 @@
     <string name="vertodosregistros">Listar jugadas</string>
     <string name="volverInicio">Volver a jugar</string>
     <string name="ajustes">Ajustes</string>
+    <string name="AjustesMusica">Música</string>
+    <string name="MusicaInicio">Menu Inicio</string>
+    <string name="MusicaJuego">Juego</string>
+    <string name="MusicaFinal">Menu Final</string>
+    <string name="musica1">Música 1</string>
+    <string name="musica2">Música 2</string>
+    <string name="musica3">Música 3</string>
+    <string name="TextoMenuMusica">Escoge la música que quieres escuchar en cada fase de la aplicación</string>
 
 </resources>

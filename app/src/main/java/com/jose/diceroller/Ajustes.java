@@ -18,7 +18,6 @@ import com.jose.diceroller.db.DbManager;
 
 public class Ajustes extends AppCompatActivity {
     private Button borrarBBDD;
-
     private DbManager dbManager;//instancia gestíon de la BBDD
 
 
@@ -28,7 +27,6 @@ public class Ajustes extends AppCompatActivity {
         setContentView(R.layout.activity_ajustes);
         borrarBBDD= findViewById(R.id.btn_borrarBBDD);
         dbManager = new DbManager(this);
-
 
         borrarBBDD.setOnClickListener(new View.OnClickListener() {
             @Override

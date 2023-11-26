@@ -15,6 +15,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -85,9 +90,6 @@ public class PantallaFinal extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
 
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("MissingInflatedId")
     @Override
@@ -142,6 +144,7 @@ public class PantallaFinal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
         btnInicio.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +155,7 @@ public class PantallaFinal extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
     //Insertar jugador con RxJava
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
@@ -172,7 +173,6 @@ public class PantallaFinal extends AppCompatActivity {
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
-
                     @Override
                     public void onSuccess(@NonNull Long id) {
                         // La inserción fue exitosa, puedes manejar el resultado aquí (id es la clave primaria generada)
@@ -210,7 +210,6 @@ public class PantallaFinal extends AppCompatActivity {
         }
         return true;
     }
-
     protected static File createFile(View view, String filename) {
         Date date = new Date();
         CharSequence format = DateFormat.getDateInstance().format("yyyy-MM-dd_hh:mm:ss");
