@@ -15,7 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
+import static com.jose.diceroller.MenuInicial.REQUEST_CODE;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +71,8 @@ public class PantallaFinal extends AppCompatActivity {
     private TextView txtPuntuacion;
     private GlobalVariables datos;
     private Button saveName, btnSalir, btnInicio;
+
+    public Activity activity = this;
     View vista;
     private DbManager dbManager;
 
@@ -80,7 +82,6 @@ public class PantallaFinal extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISO_UBICACION_MEDIOS = 1;
     private static final int REQUEST_CODE_PERMISO_ESCRIBIR_EXT = 2;
 
-    public Activity activity = this;
     private static final String[] PERMISSION = {
             Manifest.permission.ACCESS_MEDIA_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -133,6 +134,7 @@ public class PantallaFinal extends AppCompatActivity {
                     txtPuntuacion.setVisibility(View.INVISIBLE);
                     saveName.setEnabled(false);//deshabilitamos el botón de guardar
                     takeScreenCapture(activity, capture);
+                    insertEvent();
 
                 }
 
@@ -249,7 +251,6 @@ public class PantallaFinal extends AppCompatActivity {
         }
     }
 
-
     public Bitmap createScreenshot() {
         // Obtener la ventana raíz
         Window window = getWindow();
@@ -300,6 +301,16 @@ public class PantallaFinal extends AppCompatActivity {
         } catch (IOException e) {
             Log.e("PantallaFinal", "Falló al guardar la captura de pantalla", e);
         }
+    }
+
+    public void insertEvent(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CALENDAR},REQUEST_CODE );
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, "Nueva victoria DiceRoller")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "Nueva victoria alcanzada")
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, "En tu dispositivo Android");
+        startActivity(intent);
     }
 }
 
