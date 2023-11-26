@@ -8,11 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -72,11 +69,11 @@ public class MenuInicial extends AppCompatActivity {
 //            }
         if (checkLocationPermission()) { obtainLocation();
             // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-               new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                new LocationTask().execute();
-           }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//               new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                new LocationTask().execute();
+//           }
         } else {
             requestLocationPermission();
         }
