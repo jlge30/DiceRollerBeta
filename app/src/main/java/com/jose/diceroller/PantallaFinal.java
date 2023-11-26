@@ -26,7 +26,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
-
+//-------------------
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.provider.CalendarContract;
+//-------------------
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -241,115 +249,6 @@ public class PantallaFinal extends AppCompatActivity {
             ActivityCompat.requestPermissions(activity, PERMISSION, REQUEST_EXTERNAL_STORAGE);
         }
     }
-
-    public void tomarCapturaDePantalla() {
-
-        // Solicita permiso para acceder a la ubicación de los medios
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_MEDIA_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Solicita el permiso
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION}, REQUEST_CODE_PERMISO_UBICACION_MEDIOS);
-            return;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Solicita el permiso
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
-            return;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.MEDIA_CONTENT_CONTROL) != PackageManager.PERMISSION_GRANTED) {
-            // Solicita el permiso
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
-            return;
-        }
-
-        // Crea la carpeta dashrolls
-        File directorioDashrolls = new File(Environment.getExternalStorageDirectory(), "dashrolls");
-        if (!directorioDashrolls.exists()) {
-            directorioDashrolls.mkdir();
-        }
-
-
-// Toma la captura de pantalla
-        Bitmap capturaDePantalla = vista.getDrawingCache();
-
-// Genera un nombre para la captura de pantalla
-        int numero = (int) (Math.random() * 1000000);
-        String nombreCaptura = "dash_roll_" + numero + ".png";
-
-// Crea el archivo para la captura de pantalla
-        File archivoCaptura = new File(directorioDashrolls, nombreCaptura);
-        try {
-            archivoCaptura.createNewFile();
-            Log.d("DiceRollerBeta", archivoCaptura.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-
-        }
-
-// Imprime el valor de archivoCaptura
-        Log.d("DiceRollerBeta", archivoCaptura.toString());
-
-// Escribe la captura de pantalla en el archivo
-        try (FileOutputStream fos = new FileOutputStream(archivoCaptura)) {
-            capturaDePantalla.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-// Otorga permisos de escritura al archivo
-        archivoCaptura.setWritable(true);
-
-    }
-
-    public Bitmap pantallazo(){
-        try {
-            // crear un bitmap con la captura de pantalla
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-            return bitmap;
-        } catch (Throwable e) {
-            // Several error may come out with file handling or OOM
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-//    private void saveScreenshot(Bitmap bitmap) {
-//        Date now = new Date();
-//        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-//
-//        try {
-//            // nombre y ruta de la imagen a incluir
-//            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-//            System.out.println(mPath);
-//            File imageFile = new File(mPath);
-//
-//            FileOutputStream outputStream = new FileOutputStream(imageFile);
-//            int quality = 100;
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-//            outputStream.flush();
-//            outputStream.close();
-//
-//        } catch (Throwable e) {
-//            // Captura los distintos errores que puedan surgir
-//            e.printStackTrace();
-//        }
-//    }
-
-//    public void savescreentotogallery(View view, String fileName){
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-//        values.put(MediaStore.Images.Media.MIME_TYPE,"image/jpeg");
-//        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis()/1000);
-//        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-//        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/screenshots");
-//        if (ContextCompat.checkSelfPermission(getActivity(),
-//                Manifest.permission.MEDIA_CONTENT_CONTROL) != PackageManager.PERMISSION_GRANTED)
-//        }
-//    }
 
 
     public Bitmap createScreenshot() {
