@@ -15,7 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
+import static com.jose.diceroller.MenuInicial.REQUEST_CODE;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
