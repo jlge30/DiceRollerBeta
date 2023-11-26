@@ -355,37 +355,29 @@ public class PantallaFinal extends AppCompatActivity {
     public Bitmap createScreenshot() {
         // Obtener la ventana raíz
         Window window = getWindow();
-
         // Obtener el tamaño de la pantalla
         int width = window.getDecorView().getWidth();
         int height = window.getDecorView().getHeight();
-
         // Crear una nueva imagen
         Bitmap screenshot = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
         // Crear un nuevo lienzo
         Canvas canvas = new Canvas(screenshot);
-
         // Capturar la pantalla
         window.getDecorView().draw(canvas);
-
         return screenshot;
     }
 
     public void takeScreenCapture(Activity activity, Bitmap screenshot) {
-        // 1. Solicitar permisos
-
+        //Solicitar permisos
         String[] permissions = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
-
         if (activity.checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             activity.requestPermissions(permissions, REQUEST_CODE_PERMISSIONS);
 
         }
-
-        // 2. Crear carpeta
+        //Crear carpeta
 
         File diceRollerFolder = new File(
                 activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -394,14 +386,11 @@ public class PantallaFinal extends AppCompatActivity {
         if (!diceRollerFolder.exists()) {
             diceRollerFolder.mkdirs();
         }
-
-
         if (screenshot == null) {
             // Maneja el error
             Log.e("PantallaFinal", "Falló al tomar la captura de pantalla");
             return;
         }
-
         // Guarda la captura de pantalla en un archivo
         try {
             FileOutputStream outputStream = new FileOutputStream(new File(
