@@ -1,8 +1,14 @@
 package com.jose.diceroller;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +23,9 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.jose.diceroller.db.DbManager;
 
@@ -41,6 +50,11 @@ public class PantallaFinal extends AppCompatActivity {
 
     private DbManager dbManager;
 
+    // Declaraciones para las notificaciones
+    private Button btnNotificacion;
+    private static final String CHANNEL_ID = "canal"; // string para el canal (doc android)
+    private PendingIntent pendingIntent; // lanzar la actividad al hacer click
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -59,6 +73,15 @@ public class PantallaFinal extends AppCompatActivity {
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
+
+        if (datos.getPuntuacion() > 10){
+            // NOTIFICACION victoria (más de 10 monedas)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                showNotification();
+            } else {
+                showNewNotification();
+            }
+        } // Podriamos añadir un else por si existe mensaje de error
 
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -166,6 +189,47 @@ public class PantallaFinal extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    // Métodos para mostrar notificaciones
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showNotification() {
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "NEW",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
+        showNewNotification();
+    }
+
+    private void showNewNotification() {
+        setPendingIntent(MenuInicial.class); // redirigir a la pantalla NotificacionActivity al hacer click
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
+                CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Victoria!! Enhorabuena!")
+                .setContentText("Conseguiste más de 10 puntos")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        managerCompat.notify(1, builder.build());
+    }
+
+    private void setPendingIntent(Class<?> clsActivity){
+        Intent intent = new Intent(this, clsActivity);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(clsActivity);
+        stackBuilder.addNextIntent(intent);
+        pendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }

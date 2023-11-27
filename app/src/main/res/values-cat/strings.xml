@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dice Roller</string>
+    <string name="roll">Lleçar els daus</string>
+    <string name="lanzar">Has llançat</string>
+    <string name="ganado">!!Has guanyat una moneda!!</string>
+    <string name="perdido">!!Has perdut una moneda!!</string>
+    <string name="ganado2">¡¡DOBLE 6 Has guanyat 2 monedas!!</string>
+    <string name="tiradaspendientes">Tirades restants: </string>
+    <string name="bienvenida">Apptimizadores Nativos</string>
+    <string name="jugar">Jugar</string>
+    <string name="salir">Sortir</string>
+    <string name="pause">Pausa</string>
+    <string name="ayuda">Ajuda</string>
+    <string name="borrarPuntuaciones">Eliminar puntuacions</string>
+    <string name="inicio">Inici</string>
+
+    <string name="textoAyuda">El joc consisteix en llençar 10 cops
+        els daus y si la teva puntuació es mes gran que 6
+        obtens una moneda,
+        si tens un 6 doble obtens 2 monedas
+        y si tens menys de 7 punts perds una moneda</string>
+
+    <string name="volver">Tornar al inici</string>
+    <string name="tresmejores">Tres millors</string>
+    <string name="continuar">Continuar</string>
+    <string name="finaljuego">Joc terminat</string>
+    <string name="hint_GamerName">Introdueix el teu nom</string>
+    <string name="ScoreTitle">Puntuació lograda</string>
+    <string name="Scores">Puntuacions</string>
+    <string name="SaveButton">Guardar Puntuació</string>
+    <string name="NameTitle">Introdueix el teu nom</string>
+    <string name="top3">Top 3</string>
+    <string name="borrarBD">Eliminar BBDD</string>
+    <string name="vertodosregistros">Llistar jugades</string>
+    <string name="volverInicio">Tornar a jugar</string>
+    <string name="ajustes">Ajustaments</string>
+    <string name="idioma">Idioma</string>
+</resources>

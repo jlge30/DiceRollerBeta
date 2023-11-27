@@ -18,11 +18,12 @@
         los dados y si tu puntuación es mayor que 6
         obtienes una moneda,
         si tienes un 6 doble obtienes 2 monedas
-        y si tienes menos de 6 puntos pierdes una moneda</string>
+        y si tienes menos de 7 puntos pierdes una moneda</string>
+
     <string name="volver">Volver al inicio</string>
     <string name="tresmejores">Tres mejores</string>
     <string name="continuar">Continuar</string>
-    <string name="finaljuego">Game Over</string>
+    <string name="finaljuego">Juego terminado</string>
     <string name="hint_GamerName">Introduce tu nombre</string>
     <string name="ScoreTitle">Puntuación lograda</string>
     <string name="Scores">Puntuaciones</string>
@@ -33,4 +34,5 @@
     <string name="vertodosregistros">Listar jugadas</string>
     <string name="volverInicio">Volver a jugar</string>
     <string name="ajustes">Ajustes</string>
+    <string name="idioma">Idioma</string>
 </resources>

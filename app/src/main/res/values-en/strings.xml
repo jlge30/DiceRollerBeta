@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dice Roller</string>
+    <string name="roll">Throw dices</string>
+    <string name="lanzar">You throwed</string>
+    <string name="ganado">!!You won a coin!!</string>
+    <string name="perdido">!!You loose a coin!!</string>
+    <string name="ganado2">¡¡DOUBLE 6. You win 2 coins!!</string>
+    <string name="tiradaspendientes">Remaining spins: </string>
+    <string name="bienvenida">Apptimizadores Nativos</string>
+    <string name="jugar">Play</string>
+    <string name="salir">Go out</string>
+    <string name="pause">Pause</string>
+    <string name="ayuda">Help</string>
+    <string name="borrarPuntuaciones">Clear scores</string>
+    <string name="inicio">Home</string>
+
+    <string name="textoAyuda">The game consists of throwing 10 times
+        the dice and if your score is greater than 6
+        you get a coin,
+        If you have a double 6 you get 2 coins
+        and if you have less than 7 points you lose a coin</string>
+
+    <string name="volver">Back to Home</string>
+    <string name="tresmejores">Three bests</string>
+    <string name="continuar">Continue</string>
+    <string name="finaljuego">Game over</string>
+    <string name="hint_GamerName">Insert your name</string>
+    <string name="ScoreTitle">Score achieved</string>
+    <string name="Scores">Scores</string>
+    <string name="SaveButton">Save score</string>
+    <string name="NameTitle">Insert your name</string>
+    <string name="top3">Top 3</string>
+    <string name="borrarBD">Delete BBDD</string>
+    <string name="vertodosregistros">List plays</string>
+    <string name="volverInicio">Play again</string>
+    <string name="ajustes">Settings</string>
+    <string name="idioma">Language</string>
+</resources>
