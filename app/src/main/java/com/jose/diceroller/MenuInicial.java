@@ -55,6 +55,10 @@ public class MenuInicial extends AppCompatActivity {
 
     public static final int REQUEST_CODE = 1;
 
+    // Declaraciones para el cambio de idioma
+    private Spinner spinner;
+    public static final String[] languages = {" ", "ES", "EN", "CAT"};
+
     @SuppressLint({"MissingInflatedId", "SourceLockedOrientationActivity"})
 
     @Override
