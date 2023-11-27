@@ -11,15 +11,15 @@
 
     <TextView
         android:id="@+id/txt_top3"
-        android:layout_width="151dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="56dp"
+        android:layout_width="154dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/alfa_slab_one"
         android:text="Top 3"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintEnd_toStartOf="@+id/spinner"
-        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +55,7 @@
         android:id="@+id/btn_salir_juego"
         android:layout_width="261dp"
         android:layout_height="51dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/red"
         android:text="@string/salir"
         android:textSize="20sp"
@@ -66,10 +66,10 @@
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="191dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="204dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,9 +81,8 @@
         android:text="@string/idioma"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintHorizontal_bias="0.893"
         app:layout_constraintStart_toEndOf="@+id/txt_top3"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

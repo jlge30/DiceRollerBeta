@@ -1,11 +1,18 @@
 package com.jose.diceroller;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +23,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jose.diceroller.db.DbManager;
@@ -35,28 +44,49 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MenuInicial extends AppCompatActivity {
 
+
     //atributos
     private Button btnJugar, btnSalir;
 
     private DbManager dbManager;//instancia gestíon de la BBDD
     private TextView txtTopThree;
 
-    // Declaraciones para el cambio de idioma
-    private Spinner spinner;
-    public static final String[] languages = {" ", "ES", "EN", "CAT"};
+    private GlobalVariables datos;
 
-    @SuppressLint("MissingInflatedId")
+    public static final int REQUEST_CODE = 1;
+
+    @SuppressLint({"MissingInflatedId", "SourceLockedOrientationActivity"})
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         btnJugar = findViewById(R.id.btn_jugar);
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);
         btnSalir = findViewById(R.id.btn_salir_juego);
         listarTopThree();
+
+            // Para ejecutar la tarea en segundo plano
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                new LocationTask().execute();
+//            }
+        if (checkLocationPermission()) { obtainLocation();
+            // Para ejecutar la tarea en segundo plano, no funciona en los emuladores
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//               new LocationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                new LocationTask().execute();
+//           }
+        } else {
+            requestLocationPermission();
+        }
+
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
@@ -104,7 +134,6 @@ public class MenuInicial extends AppCompatActivity {
             }
         });
     }
-
     // Método para cambiar el idioma
     public void setLocal(Activity activity, String langCode){
         Locale locale = new Locale(langCode);
@@ -166,7 +195,7 @@ public class MenuInicial extends AppCompatActivity {
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MenuInicial.this));
                         recyclerView.setAdapter(listAdapter);
-
+                        
                     }
 
                     @Override
@@ -174,6 +203,54 @@ public class MenuInicial extends AppCompatActivity {
 
                     }
                 });
+    }
+    /**
+     * función para obtener localización.
+     */
+
+    @SuppressLint("SetTextI18n")
+    private void obtainLocation(){
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null){
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null){
+                datos.setLatitud(location.getLatitude());
+                datos.setLongitud(location.getLongitude());
+            }else{
+                Toast.makeText(MenuInicial.this, "No se ha podido obtener la ubicacion", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private boolean checkLocationPermission(){
+        int permissionState = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+    private void requestLocationPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE );
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @androidx.annotation.NonNull String[] permissions, @androidx.annotation.NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if ( requestCode == REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                obtainLocation();
+            }else {
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    //función asincrona para llamar a la funcion de localización.
+    private class LocationTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Llamada a la función de localización.
+            obtainLocation();
+            return null;
+        }
     }
 
 }
