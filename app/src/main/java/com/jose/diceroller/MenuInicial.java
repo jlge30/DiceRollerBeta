@@ -2,10 +2,13 @@ package com.jose.diceroller;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -14,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +33,7 @@ import com.jose.diceroller.db.ListAdapter;
 import com.jose.diceroller.db.PlayerHistory;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -46,6 +53,10 @@ public class MenuInicial extends AppCompatActivity {
     private GlobalVariables datos;
 
     public static final int REQUEST_CODE = 1;
+
+    // Declaraciones para el cambio de idioma
+    private Spinner spinner;
+    public static final String[] languages = {" ", "ES", "EN", "CAT"};
 
     @SuppressLint({"MissingInflatedId", "SourceLockedOrientationActivity"})
     @Override
@@ -94,7 +105,47 @@ public class MenuInicial extends AppCompatActivity {
             }
         });
 
+        // IDIOMAS
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLang = parent.getItemAtPosition(position).toString();
+                if (selectedLang.equals("ES")){
+                    setLocal(MenuInicial.this, "es");
+                    finish();
+                    startActivity(getIntent());
+                } else if (selectedLang.equals("EN")) {
+                    setLocal(MenuInicial.this, "en");
+                    finish();
+                    startActivity(getIntent());
+                } else if (selectedLang.equals("CAT")) {
+                    setLocal(MenuInicial.this, "cat");
+                    finish();
+                    startActivity(getIntent());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
+    // Método para cambiar el idioma
+    public void setLocal(Activity activity, String langCode){
+        Locale locale = new Locale(langCode);
+        locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config,resources.getDisplayMetrics());
+    }
+
     //añadimos el menu a la barra de herramientas
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -4,6 +4,10 @@ import static android.app.PendingIntent.getActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -43,6 +47,8 @@ import android.provider.CalendarContract;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.jose.diceroller.db.DbManager;
@@ -90,6 +96,11 @@ public class PantallaFinal extends AppCompatActivity {
     };
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
+    // Declaraciones para las notificaciones
+    private Button btnNotificacion;
+    private static final String CHANNEL_ID = "canal"; // string para el canal (doc android)
+    private PendingIntent pendingIntent; // lanzar la actividad al hacer click
+
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("MissingInflatedId")
@@ -114,6 +125,16 @@ public class PantallaFinal extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
+
+        if (datos.getPuntuacion() > 10){
+            // NOTIFICACION victoria (más de 10 monedas)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                showNotification();
+            } else {
+                showNewNotification();
+            }
+        } // Podriamos añadir un else por si existe mensaje de error
+
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -311,6 +332,47 @@ public class PantallaFinal extends AppCompatActivity {
                 .putExtra(CalendarContract.Events.DESCRIPTION, "Nueva victoria alcanzada")
                 .putExtra(CalendarContract.Events.EVENT_LOCATION, "En tu dispositivo Android");
         startActivity(intent);
+    }
+
+    // Métodos para mostrar notificaciones
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showNotification() {
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "NEW",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
+        showNewNotification();
+    }
+
+    private void showNewNotification() {
+        setPendingIntent(MenuInicial.class); // redirigir a la pantalla NotificacionActivity al hacer click
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
+                CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Victoria!! Enhorabuena!")
+                .setContentText("Conseguiste más de 10 puntos")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        managerCompat.notify(1, builder.build());
+    }
+
+    private void setPendingIntent(Class<?> clsActivity){
+        Intent intent = new Intent(this, clsActivity);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(clsActivity);
+        stackBuilder.addNextIntent(intent);
+        pendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
 
