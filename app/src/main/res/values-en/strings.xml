@@ -20,6 +20,7 @@
         you get a coin,
         If you have a double 6 you get 2 coins
         and if you have less than 7 points you lose a coin</string>
+
     <string name="volver">Back to Home</string>
     <string name="tresmejores">Three bests</string>
     <string name="continuar">Continue</string>
@@ -34,6 +35,7 @@
     <string name="vertodosregistros">List plays</string>
     <string name="volverInicio">Play again</string>
     <string name="ajustes">Settings</string>
+
     <string name="AjustesMusica">Music</string>
     <string name="MusicaInicio">Menu Home</string>
     <string name="MusicaJuego">game</string>
@@ -42,5 +44,6 @@
     <string name="musica2">Song 2</string>
     <string name="musica3">Song 3</string>
     <string name="TextoMenuMusica">Choose the music you want to listen to in each phase of the application</string>
+
     <string name="idioma">Language</string>
 </resources>

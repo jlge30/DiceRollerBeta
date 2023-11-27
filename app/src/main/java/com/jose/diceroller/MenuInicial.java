@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,11 +55,8 @@ public class MenuInicial extends AppCompatActivity {
 
     public static final int REQUEST_CODE = 1;
 
-    // Declaraciones para el cambio de idioma
-    private Spinner spinner;
-    public static final String[] languages = {" ", "ES", "EN", "CAT"};
-
     @SuppressLint({"MissingInflatedId", "SourceLockedOrientationActivity"})
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global

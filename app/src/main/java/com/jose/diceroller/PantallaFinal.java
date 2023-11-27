@@ -4,6 +4,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,6 +22,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import static com.jose.diceroller.MenuInicial.REQUEST_CODE;
 import android.media.MediaPlayer;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -50,6 +52,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+
 
 import com.jose.diceroller.db.DbManager;
 
@@ -96,6 +99,7 @@ public class PantallaFinal extends AppCompatActivity {
     };
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
+
     // Declaraciones para las notificaciones
     private Button btnNotificacion;
     private static final String CHANNEL_ID = "canal"; // string para el canal (doc android)
@@ -125,6 +129,15 @@ public class PantallaFinal extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
+
+        if (datos.getPuntuacion() > 10){
+            // NOTIFICACION victoria (más de 10 monedas)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                showNotification();
+            } else {
+                showNewNotification();
+            }
+        } // Podriamos añadir un else por si existe mensaje de error
 
         if (datos.getPuntuacion() > 10){
             // NOTIFICACION victoria (más de 10 monedas)
