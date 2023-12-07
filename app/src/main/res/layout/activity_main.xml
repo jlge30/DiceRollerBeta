@@ -140,7 +140,7 @@
         android:text="@string/finaljuego"
         android:textAlignment="center"
         android:textColor="#F10A0A"
-        android:textSize="34sp"
+        android:textSize="25dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
