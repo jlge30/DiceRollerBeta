@@ -54,7 +54,17 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jose.diceroller.db.DbManager;
+import com.jose.diceroller.db.PlayerHistory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,6 +73,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -72,7 +83,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
 public class PantallaFinal extends AppCompatActivity {
-
+    //atributos de firebase y google
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    private GoogleSignInClient gsc;
+    private GoogleSignInOptions gso;
+    FirebaseAuth mAuth;
+//resto de atributos
     private TextView textView;
     private EditText gamerN;
     private EditText editText;
@@ -124,11 +141,21 @@ public class PantallaFinal extends AppCompatActivity {
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio =findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
+
+        inicicalizarFireBase();//iniciamos firebase
+
+        mAuth = FirebaseAuth.getInstance();//iniciamos la autenticación
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
+        String nombre;
+        nombre = datos.getNombreJugador().toString();
+        gamerN.setText(nombre);
 
         if (datos.getPuntuacion() > 10){
             // NOTIFICACION victoria (más de 10 monedas)
@@ -157,10 +184,10 @@ public class PantallaFinal extends AppCompatActivity {
                     Toast.makeText(PantallaFinal.this, "Introduce el nombre", Toast.LENGTH_SHORT).show();
                     Bitmap capture = createScreenshot();
                     takeScreenCapture(activity, capture);
-
                     createFile(getWindow().getDecorView().getRootView(), "result");
                 }else {
                     Bitmap capture = createScreenshot();
+                    crearJugadaDatos();//creamos la jugada en firebase
                     insertJugadorRx();
                     gamerN.setText("");//vaciamos la caja de texto
                     datos.setPuntuacion(0);//dejamos la puntuación a 0
@@ -179,8 +206,11 @@ public class PantallaFinal extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAuth.signOut();//salimos de la autenticacion de mail y contraseña
+                signOut();//salimos de la cuenta de google
                 finish();
-
+                //nos volvemos a la ventana del login
+                startActivity(new Intent(PantallaFinal.this, LoginActivity.class));
             }
         });
         btnInicio.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +222,43 @@ public class PantallaFinal extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * metodo para guardar la jugada en firebase
+     */
+    private void crearJugadaDatos() {
+        UUID uuid = UUID.randomUUID();
+        String playerId = uuid.toString();
+        String nombre = datos.getNombreJugador();
+        int nuevaPuntuacion = datos.getPuntuacion();
+        double nuevaLatitud = datos.getLatitud();
+        double nuevaLongitud = datos.getLongitud();
+        crearJugada(playerId,nombre,nuevaPuntuacion, nuevaLatitud, nuevaLongitud );
+    }
+
+    /**
+     * función para crear las jugadas
+     * @param playerId
+     * @param nombre
+     * @param nuevaPuntuacion
+     * @param nuevaLatitud
+     * @param nuevaLongitud
+     */
+    private void crearJugada(String playerId, String nombre, int nuevaPuntuacion, double nuevaLatitud, double nuevaLongitud) {
+        //cogemos la fecha actual
+        Date currentDate = new Date();
+        // Crea un objeto SimpleDateFormat con el formato deseado
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        // convertimos la fecha a una cadena en el formato especificado
+        String dateString = dateFormat.format(currentDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(PlayerHistory.TABLE_JUGADORES);
+        PlayerHistory playerHistory = new PlayerHistory(playerId, nombre,nuevaPuntuacion, dateString, nuevaLatitud, nuevaLongitud );
+        // Crea un nuevo nodo con la UID del usuario y guarda los datos
+        databaseReference.child(playerId).setValue(playerHistory);
+    }
+
+
+
     //Insertar jugador con RxJava
     public void insertJugadorRx(){
         String nombre = gamerN.getText().toString();
@@ -242,6 +309,8 @@ public class PantallaFinal extends AppCompatActivity {
             finish();
         }
         else if(id == R.id.menu_salir){
+            mAuth.signOut();
+            signOut();
             finish();
         }
         return true;
@@ -386,6 +455,30 @@ public class PantallaFinal extends AppCompatActivity {
         stackBuilder.addParentStack(clsActivity);
         stackBuilder.addNextIntent(intent);
         pendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    /**
+     * funcion para iniciar firebase
+     */
+    private void inicicalizarFireBase() {
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
+
+    }
+
+    /**
+     * función para salir de la cuenta de google
+     */
+    private void signOut() {
+        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(Task<Void> task) {
+                finish();
+                startActivity(new Intent(PantallaFinal.this, LoginActivity.class));
+            }
+        });
     }
 }
 

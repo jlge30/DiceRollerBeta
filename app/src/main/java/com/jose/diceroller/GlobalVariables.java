@@ -8,6 +8,17 @@ public class GlobalVariables extends Application{
     private double latitud = 0;
     private double longitud = 0;
     private int puntuacion;
+
+    private String nombreJugador;
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
     public double getLatitud() {
         return latitud;
     }
@@ -28,4 +39,6 @@ public class GlobalVariables extends Application{
     public void setPuntuacion(int puntuacion){
         this.puntuacion = puntuacion;
     }
+
+
 }

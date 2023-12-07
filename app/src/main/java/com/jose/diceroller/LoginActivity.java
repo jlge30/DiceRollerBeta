@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button btnLogin, btnRegistrar;
+    Button btnLogin, btnRegistrar, btnSalir;
     EditText txtEmail;
     EditText txtPassword;
 
@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txt_email_login);
         btnLogin = findViewById(R.id.btn_login);
         btnRegistrar = findViewById(R.id.btn_registrar);
+        btnSalir = findViewById(R.id.btn_salir);
         //iniciamos la autenticación de firebase con usuario y contraseña
         mAuth = FirebaseAuth.getInstance();
 
@@ -57,7 +58,13 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MenuInicial.class));
+               startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

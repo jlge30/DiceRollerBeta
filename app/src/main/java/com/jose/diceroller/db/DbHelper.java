@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String COLUMN_LONGITUD = "longitud";
 
-    public PlayerHistory playerHistory;
+    public PlayerHistorydb playerHistorydb;
     public Context context;
 
 

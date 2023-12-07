@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
-        app:cardCornerRadius="15dp"
+        android:id="@+id/cardView"
+        app:cardCornerRadius="16dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,72 +21,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="20dp"
-            android:padding="10dp"
-            tools:layout_editor_absoluteY="37dp">
+            android:orientation="vertical">
 
             <EditText
-                android:id="@+id/txt_email_login"
+                android:layout_marginTop="10dp"
+                android:id="@+id/txt_nombre_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Intruduce tu mail"
+                android:ems="10"
                 android:inputType="text"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="82dp" />
+                android:hint="Introduce tu nombre"
+                />
 
             <EditText
-                android:id="@+id/txt_pass_login"
+                android:id="@+id/txt_email_registro"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Intruduce tu pass"
+                android:ems="10"
                 android:inputType="text"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="82dp" />
+                android:hint="Introduce tu mail" />
+
+            <EditText
+                android:id="@+id/txt_pass_registro"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="Introduce tu contraseña" />
+
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
                 />
+
             <Button
-                android:id="@+id/btn_login"
-                android:backgroundTint="#0342FB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Entrar" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                />
-            <Button
+                android:layout_marginTop="10dp"
                 android:id="@+id/btn_registrar"
-                android:backgroundTint="#FF509C4D"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registrar" />
+                android:textSize="16dp"
+                android:text="Registrar usuario" />
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
                 />
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/btn_google"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                />
             <Button
-                android:id="@+id/btn_salir"
-                android:backgroundTint="#FA0202"
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_ir_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Salir del juego" />
+                android:backgroundTint="#FF509C4D"
+                android:textSize="16dp"
+                android:text="Login" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

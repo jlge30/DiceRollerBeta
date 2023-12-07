@@ -1,7 +1,6 @@
 package com.jose.diceroller.db;
 
-
-public class PlayerHistory {
+public class PlayerHistorydb {
     //atributos del jugador
     public static final String TABLE_JUGADORES = "jugadores";
     public static final String COLUMN_ID = "id";
@@ -16,35 +15,33 @@ public class PlayerHistory {
 
 
 
-    private String id;
+    private int id;
     private String nombre;
-    private int puntuacion = 0;
+    private int puntuacion;
     private String fecha;
 
-    private double latitud = 0;
+    private double latitud;
 
-    private double longitud = 0;
+    private double longitud;
 
     //constructores
-    public PlayerHistory(){
+    public PlayerHistorydb(){
 
     }
 
-    public PlayerHistory(String nombre, int puntuacion, String fecha) {
+    public PlayerHistorydb(String nombre, int puntuacion, String fecha) {
         this.nombre = nombre;
         this.puntuacion = puntuacion;
         this.fecha = fecha;
     }
-
-
-    public PlayerHistory(String id, String nombre, int puntuacion, String fecha) {
+    public PlayerHistorydb(int id, String nombre, int puntuacion, String fecha) {
         this.id = id;
         this.nombre = nombre;
         this.puntuacion = puntuacion;
         this.fecha = fecha;
     }
 
-    public PlayerHistory(String id, String nombre, int puntuacion, String fecha, double latitud, double longitud) {
+    public PlayerHistorydb(int id, String nombre, int puntuacion, String fecha, double latitud, double longitud) {
         this.id = id;
         this.nombre = nombre;
         this.puntuacion = puntuacion;
@@ -69,11 +66,11 @@ public class PlayerHistory {
         this.longitud = longitud;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

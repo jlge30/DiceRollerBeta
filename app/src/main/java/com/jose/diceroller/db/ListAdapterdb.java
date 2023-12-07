@@ -12,13 +12,13 @@ import com.jose.diceroller.R;
 
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
-    private List<PlayerHistory> mData;
+public class ListAdapterdb extends RecyclerView.Adapter<ListAdapterdb.ViewHolder> {
+    private List<PlayerHistorydb> mData;
     private LayoutInflater mInflater;
 
     private Context context;
 
-    public ListAdapter(List<PlayerHistory> itemList, Context context){
+    public ListAdapterdb(List<PlayerHistorydb> itemList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
@@ -29,15 +29,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mData.size();
     }
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public ListAdapterdb.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = mInflater.inflate(R.layout.list_element, null);
-        return new ListAdapter.ViewHolder(view);
+        return new ListAdapterdb.ViewHolder(view);
     }
     @Override
-    public void onBindViewHolder(final ListAdapter.ViewHolder holder, final int position){
+    public void onBindViewHolder(final ListAdapterdb.ViewHolder holder, final int position){
         holder.bindData(mData.get(position));
     }
-    public void setItems(List<PlayerHistory> items){
+    public void setItems(List<PlayerHistorydb> items){
         mData = items;
     }
 
@@ -55,7 +55,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             longitud = itemView.findViewById(R.id.longitudTextView);
 
         }
-        void bindData(final PlayerHistory item){
+        void bindData(final PlayerHistorydb item){
             id.setText("Id: "+(String.valueOf(item.getId())));
             name.setText(item.getNombre());
             puntuacion.setText("Monedas: " +(String.valueOf(item.getPuntuacion())));

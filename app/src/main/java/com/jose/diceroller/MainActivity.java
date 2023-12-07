@@ -33,8 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-//    private TextView resultado1;
-//    private TextView resultado2;
+
     /*
     Atributos para generar un numero aleatorio
      */
@@ -62,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private int tiradas = 10;
+
+
 
 
 

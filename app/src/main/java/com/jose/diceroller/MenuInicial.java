@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,9 +30,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jose.diceroller.db.DbManager;
-import com.jose.diceroller.db.ListAdapter;
+import com.jose.diceroller.db.ListAdapterdb;
 import com.jose.diceroller.db.PlayerHistory;
+import com.jose.diceroller.db.PlayerHistorydb;
 
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +60,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MenuInicial extends AppCompatActivity {
 
+    //variables de firebase y aut. google
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
+    private GoogleSignInClient gsc;
+    private GoogleSignInOptions gso;
+    FirebaseAuth mAuth;
 
     //atributos
     private Button btnJugar, btnSalir;
@@ -71,6 +94,21 @@ public class MenuInicial extends AppCompatActivity {
         txtTopThree = findViewById(R.id.txt_top3);
         dbManager = new DbManager(this);
         btnSalir = findViewById(R.id.btn_salir_juego);
+
+        inicicalizarFireBase();//iniciamos firebase
+        mAuth = FirebaseAuth.getInstance();//iniciamos la autenticación
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null){// si no hemos iniciado por google nos vamos a obtener el nombre del usuario creado
+            String persone = account.getDisplayName();
+            String email = account.getEmail();
+            datos.setNombreJugador(persone);//obtenemos el nombre del usuario de google
+        }else {
+            obtenerNombre();//obtenemos el nombre del usuario registrado
+        }
+
         listarTopThree();
 
             // Para ejecutar la tarea en segundo plano
@@ -91,6 +129,7 @@ public class MenuInicial extends AppCompatActivity {
             requestLocationPermission();
         }
 
+
         btnJugar.setOnClickListener(new View.OnClickListener() {//pasar a la siguiente ventana
             @Override
             public void onClick(View v) {
@@ -103,7 +142,11 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAuth.signOut();//salimos de la autenticacion de mail y contraseña
+                signOut();//salimos de la cuenta de google
                 finish();
+                //nos volvemos a la ventana del login
+                startActivity(new Intent(MenuInicial.this, LoginActivity.class));
             }
         });
 
@@ -174,6 +217,8 @@ public class MenuInicial extends AppCompatActivity {
             finish();
         }
         else if(id == R.id.menu_salir){
+            mAuth.signOut();//salimos de la autenticacion de mail y contraseña
+            signOut();
             finish();
         }
         return true;
@@ -185,20 +230,20 @@ public class MenuInicial extends AppCompatActivity {
         dbManager.getTopThree()
                 .subscribeOn(Schedulers.io()) // Ejecuta la consulta en un hilo diferente
                 .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
-                .subscribe(new SingleObserver<List<PlayerHistory>>() {
+                .subscribe(new SingleObserver<List<PlayerHistorydb>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {
-                        ListAdapter listAdapter = new ListAdapter(playerHistories, MenuInicial.this);
+                    public void onSuccess(@NonNull List<PlayerHistorydb> playerHistories) {
+                        ListAdapterdb listAdapterdb = new ListAdapterdb(playerHistories, MenuInicial.this);
 
                         androidx.recyclerview.widget.RecyclerView recyclerView = findViewById(R.id.listTopThree);
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MenuInicial.this));
-                        recyclerView.setAdapter(listAdapter);
+                        recyclerView.setAdapter(listAdapterdb);
                         
                     }
 
@@ -255,6 +300,62 @@ public class MenuInicial extends AppCompatActivity {
             obtainLocation();
             return null;
         }
+    }
+
+    /**
+     * funcion para iniciar firebase
+     */
+    private void inicicalizarFireBase() {
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
+
+    }
+
+    /**
+     * obtenemos el nombre del usuario registrado con mail y contraseña
+     */
+    private void obtenerNombre() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        // Obtén el usuario actualmente autenticado
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // El usuario está autenticado
+            String userId = currentUser.getUid();
+            // Obtén los detalles adicionales del usuario desde la base de datos
+            databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@androidx.annotation.NonNull DataSnapshot dataSnapshot) {
+                    // Aquí, dataSnapshot contiene los datos adicionales del usuario
+                    if (dataSnapshot.exists()) {
+                        String userName = dataSnapshot.child(PlayerHistory.COLUMN_NOMBRE).getValue(String.class);
+                        //ponemos el nombre en la caja de texto
+                        datos.setNombreJugador(userName);
+                    }
+                }
+                @Override
+                public void onCancelled(@androidx.annotation.NonNull DatabaseError databaseError) {
+                    // Manejar errores si es necesario
+                    Log.e("DatabaseError", "Error al obtener datos de la base de datos", databaseError.toException());
+                }
+            });
+        } else {
+            Toast.makeText(MenuInicial.this, "No hemos obtenido el nombre", Toast.LENGTH_SHORT).show();
+        }
+    }
+    /**
+     * función para salir de la cuenta de google
+     */
+    private void signOut() {
+        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(Task<Void> task) {
+                finish();
+                startActivity(new Intent(MenuInicial.this, LoginActivity.class));
+
+            }
+        });
     }
 
 }

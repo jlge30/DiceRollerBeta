@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jose.diceroller.db.DbManager;
-import com.jose.diceroller.db.ListAdapter;
-import com.jose.diceroller.db.PlayerHistory;
+import com.jose.diceroller.db.ListAdapterdb;
+import com.jose.diceroller.db.PlayerHistorydb;
 
 import java.util.List;
 
@@ -64,20 +64,20 @@ public class RecyclerView extends AppCompatActivity {
         dbManager.getAllJugadores()
                 .subscribeOn(Schedulers.io()) // Ejecuta la consulta en un hilo diferente
                 .observeOn(AndroidSchedulers.mainThread()) // Recibe el resultado en el hilo principal
-                .subscribe(new SingleObserver<List<PlayerHistory>>() {
+                .subscribe(new SingleObserver<List<PlayerHistorydb>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull List<PlayerHistory> playerHistories) {
-                        ListAdapter listAdapter = new ListAdapter(playerHistories, RecyclerView.this);
+                    public void onSuccess(@NonNull List<PlayerHistorydb> playerHistories) {
+                        ListAdapterdb listAdapterdb = new ListAdapterdb(playerHistories, RecyclerView.this);
 
                         androidx.recyclerview.widget.RecyclerView recyclerView = findViewById(R.id.listReciclaje);
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(RecyclerView.this));
-                        recyclerView.setAdapter(listAdapter);
+                        recyclerView.setAdapter(listAdapterdb);
 
                     }
 
