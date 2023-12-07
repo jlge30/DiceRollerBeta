@@ -23,7 +23,7 @@ public class Bienvenida extends Activity {
         TimerTask tarea =new TimerTask() {//creamos la tarea de la ventana bienvenida
             @Override
             public void run() {//tarea para que la pantalla esté visible 3 segundos
-                Intent intent = new Intent(Bienvenida.this, MenuInicial.class);
+                Intent intent = new Intent(Bienvenida.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
