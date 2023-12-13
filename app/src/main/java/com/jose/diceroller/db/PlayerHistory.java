@@ -36,6 +36,13 @@ public class PlayerHistory {
         this.fecha = fecha;
     }
 
+    public PlayerHistory(String nombre, int puntuacion, String fecha, double latitud, double longitud) {
+        this.nombre = nombre;
+        this.puntuacion = puntuacion;
+        this.fecha = fecha;
+        this.latitud = latitud;
+        this.longitud = longitud;
+    }
 
     public PlayerHistory(String id, String nombre, int puntuacion, String fecha) {
         this.id = id;

@@ -9,6 +9,16 @@ public class GlobalVariables extends Application{
     private double longitud = 0;
     private int puntuacion;
 
+    private int puntosBote;
+
+    public int getPuntosBote() {
+        return puntosBote;
+    }
+
+    public void setPuntosBote(int puntosBote) {
+        this.puntosBote = puntosBote;
+    }
+
     private String nombreJugador;
 
     public String getNombreJugador() {

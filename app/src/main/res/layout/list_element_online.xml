@@ -8,6 +8,7 @@
     app:cardCornerRadius="20dp"
     app:cardElevation="1dp"
     app:cardUseCompatPadding="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +17,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -62,6 +63,7 @@
 
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="wrap_content"
@@ -77,8 +79,8 @@
                         android:id="@+id/latitudTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="1dp"
                         android:text="latitud"
                         android:textSize="16sp" />
 
@@ -90,19 +92,6 @@
                         android:text="longitud"
                         android:textSize="16sp" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/idTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:text="Id"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
 
 
             </RelativeLayout>

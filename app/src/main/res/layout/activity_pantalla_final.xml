@@ -100,7 +100,7 @@
         android:textColorHighlight="#D50000"
         android:textColorHint="#D50000"
         android:textColorLink="#D50000"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:iconTint="#D50000"
         app:iconTintMode="add"
         app:layout_constraintBottom_toTopOf="@+id/txtScoreTitle"

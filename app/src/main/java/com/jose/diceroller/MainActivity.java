@@ -33,7 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
+//    private TextView resultado1;
+//    private TextView resultado2;
     /*
     Atributos para generar un numero aleatorio
      */
@@ -61,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private int tiradas = 10;
-
-
 
 
 
@@ -263,9 +262,13 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(MainActivity.this, PantallaFinal.class);
-                    startActivity(intent);
+
+                    Intent intent = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        intent = new Intent(MainActivity.this, PantallaFinal.class);
+                    }
                     finish();//cerramos la primera vista
+                    startActivity(intent);
 
                 }
             }, 2000); // retraso de 2 segundos el cierre de la ventana

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayersOnlineActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:fontFamily="@font/alfa_slab_one"
+            android:textAlignment="center"
+            android:text="Top Ten Players online"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            />
+        <TextView
+            android:id="@+id/txt_bote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:fontFamily="@font/alfa_slab_one"
+            android:textAlignment="center"
+            android:text=""/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listTopTen"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_top3" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            />
+        <Button
+            android:id="@+id/btn_jugar"
+            android:fontFamily="@font/alfa_slab_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:backgroundTint="@color/green"
+            android:text="@string/jugar" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            />
+
+        <Button
+            android:id="@+id/btn_salir"
+            android:fontFamily="@font/alfa_slab_one"
+            android:textSize="20dp"
+            android:backgroundTint="#FD0303"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/salir" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

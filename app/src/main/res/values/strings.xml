@@ -29,7 +29,7 @@
     <string name="Scores">Puntuaciones</string>
     <string name="SaveButton">Guardar Puntuación</string>
     <string name="NameTitle">Introduce tu Nombre</string>
-    <string name="top3">Top 3</string>
+    <string name="top3">Top 3 movil</string>
     <string name="borrarBD">Borrar BBDD</string>
     <string name="vertodosregistros">Listar jugadas</string>
     <string name="volverInicio">Volver a jugar</string>
@@ -45,4 +45,5 @@
     <string name="TextoMenuMusica">Escoge la música que quieres escuchar en cada fase de la aplicación</string>
 
     <string name="idioma">Idioma</string>
+    <string name="default_web_client_id">923572629789-196bcplknc71s3s2fr514tt3eqlg025c.apps.googleusercontent.com</string>
 </resources>

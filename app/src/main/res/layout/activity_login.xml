@@ -26,50 +26,9 @@
             android:padding="10dp"
             tools:layout_editor_absoluteY="37dp">
 
-            <EditText
-                android:id="@+id/txt_email_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Intruduce tu mail"
-                android:inputType="text"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="82dp" />
-
-            <EditText
-                android:id="@+id/txt_pass_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Intruduce tu pass"
-                android:inputType="text"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="82dp" />
-
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
-                />
-            <Button
-                android:id="@+id/btn_login"
-                android:backgroundTint="#0342FB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Entrar" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                />
-            <Button
-                android:id="@+id/btn_registrar"
-                android:backgroundTint="#FF509C4D"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registrar" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                />
+                android:layout_height="55dp" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/btn_google"
@@ -79,6 +38,30 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/txt_nombre"
+                android:textSize="20dp"
+                android:text=""
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                />
+            <Button
+                android:id="@+id/btn_jugar"
+                android:backgroundTint="#4CAF50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Jugar" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
                 />
             <Button
                 android:id="@+id/btn_salir"

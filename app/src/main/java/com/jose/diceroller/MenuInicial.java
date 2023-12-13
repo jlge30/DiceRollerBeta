@@ -64,9 +64,9 @@ public class MenuInicial extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
-    private GoogleSignInClient gsc;
-    private GoogleSignInOptions gso;
-    FirebaseAuth mAuth;
+//    private GoogleSignInClient gsc;
+//    private GoogleSignInOptions gso;
+
 
     //atributos
     private Button btnJugar, btnSalir;
@@ -95,19 +95,17 @@ public class MenuInicial extends AppCompatActivity {
         dbManager = new DbManager(this);
         btnSalir = findViewById(R.id.btn_salir_juego);
 
-        inicicalizarFireBase();//iniciamos firebase
-        mAuth = FirebaseAuth.getInstance();//iniciamos la autenticación
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null){// si no hemos iniciado por google nos vamos a obtener el nombre del usuario creado
-            String persone = account.getDisplayName();
-            String email = account.getEmail();
-            datos.setNombreJugador(persone);//obtenemos el nombre del usuario de google
-        }else {
-            obtenerNombre();//obtenemos el nombre del usuario registrado
-        }
+        inicicalizarFireBase();//iniciamos firebase
+
+//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+//        gsc = GoogleSignIn.getClient(this, gso);
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if (account != null){// si no hemos iniciado por google nos vamos a obtener el nombre del usuario creado
+//            String persone = account.getDisplayName();
+//            String email = account.getEmail();
+//            datos.setNombreJugador(persone);//obtenemos el nombre del usuario de google
+//        }
 
         listarTopThree();
 
@@ -142,11 +140,8 @@ public class MenuInicial extends AppCompatActivity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();//salimos de la autenticacion de mail y contraseña
+
                 signOut();//salimos de la cuenta de google
-                finish();
-                //nos volvemos a la ventana del login
-                startActivity(new Intent(MenuInicial.this, LoginActivity.class));
             }
         });
 
@@ -217,9 +212,8 @@ public class MenuInicial extends AppCompatActivity {
             finish();
         }
         else if(id == R.id.menu_salir){
-            mAuth.signOut();//salimos de la autenticacion de mail y contraseña
+
             signOut();
-            finish();
         }
         return true;
     }
@@ -316,46 +310,14 @@ public class MenuInicial extends AppCompatActivity {
     /**
      * obtenemos el nombre del usuario registrado con mail y contraseña
      */
-    private void obtenerNombre() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        // Obtén el usuario actualmente autenticado
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            // El usuario está autenticado
-            String userId = currentUser.getUid();
-            // Obtén los detalles adicionales del usuario desde la base de datos
-            databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@androidx.annotation.NonNull DataSnapshot dataSnapshot) {
-                    // Aquí, dataSnapshot contiene los datos adicionales del usuario
-                    if (dataSnapshot.exists()) {
-                        String userName = dataSnapshot.child(PlayerHistory.COLUMN_NOMBRE).getValue(String.class);
-                        //ponemos el nombre en la caja de texto
-                        datos.setNombreJugador(userName);
-                    }
-                }
-                @Override
-                public void onCancelled(@androidx.annotation.NonNull DatabaseError databaseError) {
-                    // Manejar errores si es necesario
-                    Log.e("DatabaseError", "Error al obtener datos de la base de datos", databaseError.toException());
-                }
-            });
-        } else {
-            Toast.makeText(MenuInicial.this, "No hemos obtenido el nombre", Toast.LENGTH_SHORT).show();
-        }
-    }
     /**
      * función para salir de la cuenta de google
      */
     private void signOut() {
-        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(Task<Void> task) {
+
                 finish();
                 startActivity(new Intent(MenuInicial.this, LoginActivity.class));
 
-            }
-        });
     }
 
 }
