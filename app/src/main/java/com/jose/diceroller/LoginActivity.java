@@ -63,12 +63,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //iniciamos los servicios de autenticacion de google
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
+//        //iniciamos los servicios de autenticacion de google
+//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//
+//        gsc = GoogleSignIn.getClient(this, gso);
 
         //botón login de cuenta de google
         btnGoogle.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 GoogleSignInAccount account = Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount();
                 if (account != null) {
-                    firebaseAuthWithGoogle(account.getIdToken());
+                    //firebaseAuthWithGoogle(account.getIdToken());
                     //datos.setNombreJugador(account.getDisplayName());
                     txtNombre.setText(account.getDisplayName());
                     btnJugar.setVisibility(View.VISIBLE);
