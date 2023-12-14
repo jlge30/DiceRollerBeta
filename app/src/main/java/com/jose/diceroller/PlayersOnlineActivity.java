@@ -317,7 +317,6 @@ public class PlayersOnlineActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@io.reactivex.rxjava3.annotations.NonNull DataSnapshot dataSnapshot) {
                 int dato = dataSnapshot.getValue(Integer.class);
-
                 String datoString = String.valueOf(dato);
                 txtBote.setText("Bote acumulado: "+ datoString);
                 Toast.makeText(PlayersOnlineActivity.this, "El bote tienes: "+String.valueOf(datos.getPuntosBote()), Toast.LENGTH_SHORT).show();

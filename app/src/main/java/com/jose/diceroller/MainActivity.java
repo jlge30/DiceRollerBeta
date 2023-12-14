@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             createOldSoundPool();
         }
 
+        datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
         txtTiradas = findViewById(R.id.txtTiradas);
         String mensaje = "Tiradas Pendientes: " + String.valueOf(tiradas);
         txtTiradas.setText(mensaje);
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         /*
         llamamos a la variables globales
          */
-        datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
+        //datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
 
         /*
         Imagenes iniciales que creamos para alojar los dados

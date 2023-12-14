@@ -162,9 +162,9 @@ public class PantallaFinal extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
-        String nombre;
-        nombre = datos.getNombreJugador().toString();
-        gamerN.setText(nombre);
+        //String nombre;
+        //nombre = datos.getNombreJugador().toString();
+        //gamerN.setText(nombre);
 
         //Vamos a crear un bote cada vez que el jugador no llegue a 15 puntos este bote se acumulará en firestore de firebase
 
@@ -475,7 +475,8 @@ public class PantallaFinal extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         // convertimos la fecha a una cadena en el formato especificado
         String dateString = dateFormat.format(currentDate);
-        String nombre = datos.getNombreJugador();
+        //String nombre = datos.getNombreJugador();
+        String nombre = gamerN.getText().toString();
         int puntos = puntosRecibidos;
         double latitud = datos.getLatitud();
         double longitud = datos.getLongitud();

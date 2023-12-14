@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnSalir, btnJugar;
     TextView txtNombre;
 
-    GlobalVariables datos;
+   // GlobalVariables datos;
 
     SignInButton btnGoogle;
 
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
+        //datos = (GlobalVariables) getApplicationContext();//instanciamos la variable global
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         this.setTitle("Login");
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount();
                 if (account != null) {
                     firebaseAuthWithGoogle(account.getIdToken());
-                    datos.setNombreJugador(account.getDisplayName());
+                    //datos.setNombreJugador(account.getDisplayName());
                     txtNombre.setText(account.getDisplayName());
                     btnJugar.setVisibility(View.VISIBLE);
                     //navigateToCreatePlayer();
