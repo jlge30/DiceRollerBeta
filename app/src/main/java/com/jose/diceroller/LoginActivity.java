@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 GoogleSignInAccount account = Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount();
                 if (account != null) {
-                    //firebaseAuthWithGoogle(account.getIdToken());
+                    ///firebaseAuthWithGoogle(account.getIdToken());
                     //datos.setNombreJugador(account.getDisplayName());
                     txtNombre.setText(account.getDisplayName());
                     btnJugar.setVisibility(View.VISIBLE);
