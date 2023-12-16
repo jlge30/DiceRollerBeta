@@ -34,8 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     Button btnSalir, btnJugar;
     TextView txtNombre;
 
-   // GlobalVariables datos;
-
     SignInButton btnGoogle;
 
     FirebaseAuth mAuth;
@@ -65,13 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         //iniciamos los servicios de autenticacion de google
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
-//        //iniciamos los servicios de autenticacion de google
-//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//
-//        gsc = GoogleSignIn.getClient(this, gso);
+
 
         //botón login de cuenta de google
         btnGoogle.setOnClickListener(new View.OnClickListener() {
@@ -139,11 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 GoogleSignInAccount account = Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount();
                 if (account != null) {
-                    ///firebaseAuthWithGoogle(account.getIdToken());
-                    //datos.setNombreJugador(account.getDisplayName());
                     txtNombre.setText(account.getDisplayName());
                     btnJugar.setVisibility(View.VISIBLE);
-                    //navigateToCreatePlayer();
                     Toast.makeText(LoginActivity.this, "REGISTRO CORRECTO: "+ account.getDisplayName() , Toast.LENGTH_SHORT).show();
                 }
 
@@ -162,25 +151,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(LoginActivity.this, PlayersOnlineActivity.class));
     }
 
-    /**
-     * metodo para grabar en la tabla users los datos de la cuenta de google que se ha logueado
-     * @param idToken
-     */
-    private void firebaseAuthWithGoogle(String idToken){
-        mAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()){
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("id", user.getUid());
-                        map.put("name", user.getDisplayName());
-                        map.put("email",user.getEmail());
-                        firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
-                    }else {
-                        Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 
     /**
      * Actualizamos los datos el usuario que hay logueado
@@ -189,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             String displayName = user.getDisplayName();
-            String email = user.getEmail();
+            txtNombre.setText(displayName);
             btnJugar.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Bienvenido, " + displayName, Toast.LENGTH_SHORT).show();
 

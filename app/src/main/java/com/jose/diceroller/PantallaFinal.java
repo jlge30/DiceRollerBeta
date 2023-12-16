@@ -40,21 +40,14 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import com.jose.diceroller.db.ApiClient;
 import com.jose.diceroller.db.ApiService;
-import com.jose.diceroller.db.Bote;
+
 import com.jose.diceroller.db.DbManager;
 import com.jose.diceroller.db.PlayerHistory;
 
@@ -65,8 +58,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -92,13 +83,12 @@ public class PantallaFinal extends AppCompatActivity {
     private GlobalVariables datos;
     private Button saveName, btnSalir, btnInicio;
 
-
-    private int datosGrabar;
-    private int puntosParaBote = 15;//puntos mínimos para llevarte el bote
-    private int puntosActualesBote; //vemos los puntos que tenemos en el bote
     public Activity activity = this;
     View vista;
     private DbManager dbManager;
+
+
+    private int puntosPartida;
 
     public static final int REQUEST_CODE_PERMISSIONS = 1;
 
@@ -117,13 +107,12 @@ public class PantallaFinal extends AppCompatActivity {
 
 
     // Declaraciones para las notificaciones
-    private Button btnNotificacion;
+
     private static final String CHANNEL_ID = "canal"; // string para el canal (doc android)
     private PendingIntent pendingIntent; // lanzar la actividad al hacer click
 
     private ApiService apiService; //variable para usarla en la inserción del jugador con retrofit
 
-    private Gson gson;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("MissingInflatedId")
@@ -136,56 +125,36 @@ public class PantallaFinal extends AppCompatActivity {
         dbManager = new DbManager(this);
         textView = findViewById(R.id.txt_puntos);//localizamos el txt de los puntos
         gamerN = findViewById(R.id.txtGamerN);
-        String puntos = "Monedas ganadas: " + String.valueOf(datos.getPuntuacion());//mostramos el valor de la puntuación global
+        Intent intent = getIntent();
+        puntosPartida = intent.getIntExtra("Puntos",0);
+
+//        int datosGlobal = datos.getPuntuacion();
+        String puntos = "Monedas ganadas: " + String.valueOf(puntosPartida);//mostramos el valor de la puntuación global
         textView.setText(puntos);//mensaje de número de monedas
         saveName = findViewById(R.id.SaveButton);
         vista = findViewById(R.id.SaveButton);
         txtPuntuacion = findViewById(R.id.txtScoreTitle);
         btnInicio = findViewById(R.id.btn_volver_jugar);
         btnSalir = findViewById(R.id.btn_salir);
-        gson = new Gson();
         mfirestore = FirebaseFirestore.getInstance(); //instanciamos la bbdd
         apiService = ApiClient.getClient().create(ApiService.class);//instanciamos la api para cargar los jugadores con Retrofit
 
-//        puntosActualesBote = datos.getPuntosBote();
-//
-//        if (datos.getPuntuacion() >= puntosParaBote) {
-//            datosGrabar = puntosActualesBote + datos.getPuntuacion();
-//            Toast.makeText(PantallaFinal.this, "Ganaste el Bote te llevas:  " + datosGrabar, Toast.LENGTH_SHORT).show();
-//        } else {
-//            datosGrabar = datos.getPuntuacion();
-//
-//        }
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
-        //String nombre;
-        //nombre = datos.getNombreJugador().toString();
-        //gamerN.setText(nombre);
-
-        //Vamos a crear un bote cada vez que el jugador no llegue a 15 puntos este bote se acumulará en firestore de firebase
 
 
-        if (datos.getPuntuacion() > 10) {
-            // NOTIFICACION victoria (más de 10 monedas)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                showNotification();
-            } else {
-                showNewNotification();
-            }
-        } // Podriamos añadir un else por si existe mensaje de error
-
-        if (datos.getPuntuacion() > 10) {
-            // NOTIFICACION victoria (más de 10 monedas)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                showNotification();
-            } else {
-                showNewNotification();
-            }
-        } // Podriamos añadir un else por si existe mensaje de error
+//        if (puntosPartida > 10) {
+//            // NOTIFICACION victoria (más de 10 monedas)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                showNotification();
+//            } else {
+//                showNewNotification();
+//            }
+//        } // Podriamos añadir un else por si existe mensaje de error
 
         saveName.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -201,14 +170,8 @@ public class PantallaFinal extends AppCompatActivity {
                 } else {
                     Bitmap capture = createScreenshot();
                     int datosGrabar1 = datos.getPuntuacion();
-                    crearJugada(datosGrabar1);
-                    insertJugadorRx();
-//                    if (datos.getPuntuacion() >= puntosParaBote) {
-//                        ajustarSaldoBote(0);
-//                        datos.setPuntosBote(0);
-//                    } else {
-//                        ajustarSaldoBote(puntosParaBote + datos.getPuntosBote());
-//                    }
+                    crearJugada(puntosPartida);
+                    insertJugadorRx(puntosPartida);
                     gamerN.setText("");//vaciamos la caja de texto
                     datos.setPuntuacion(0);//dejamos la puntuación a 0
                     textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
@@ -242,9 +205,9 @@ public class PantallaFinal extends AppCompatActivity {
 
 
     //Insertar jugador con RxJava
-    public void insertJugadorRx() {
+    public void insertJugadorRx(int puntosPartida) {
         String nombre = gamerN.getText().toString();
-        int puntuacion = datos.getPuntuacion();
+        int puntuacion = puntosPartida;
         Date fecha = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Ajusta el formato
         String fechaStr = dateFormat.format(fecha);
@@ -452,30 +415,12 @@ public class PantallaFinal extends AppCompatActivity {
 
 
     /**
-     * comprobamos si el jugador ha ganado el bote
-     *
-     * @return
-     */
-    private boolean ganarBote() {
-        if (datos.getPuntuacion() >= puntosParaBote) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
      * preparamos los datos del jugador para cargar en la bbdd
      */
     private void crearJugada(int puntosRecibidos) {
-        //cogemos la fecha actual
         Date currentDate = new Date();
-        // Crea un objeto SimpleDateFormat con el formato deseado
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        // convertimos la fecha a una cadena en el formato especificado
         String dateString = dateFormat.format(currentDate);
-        //String nombre = datos.getNombreJugador();
         String nombre = gamerN.getText().toString();
         int puntos = puntosRecibidos;
         double latitud = datos.getLatitud();
@@ -511,17 +456,7 @@ public class PantallaFinal extends AppCompatActivity {
 
     }
 
-    /**
-     * Función para cargar el bote o vaciarle a cero
-     *
-     * @param cantidad
-     */
-    private void ajustarSaldoBote(int cantidad) {
-        DocumentReference boteMonedasRef = mfirestore.collection(Bote.TABLE_BOTE).document(Bote.ID_DOCUMENTO);
-        boteMonedasRef.update(Bote.PUNTOS, cantidad)
-                .addOnSuccessListener(aVoid -> Log.d("TAG", "Saldo ajustado con éxito"))
-                .addOnFailureListener(e -> Log.d("TAG", "Error al ajustar el saldo: " + e.getMessage()));
-    }
+
 
 
 }
@@ -529,6 +464,18 @@ public class PantallaFinal extends AppCompatActivity {
 
 
     ///--------------------no usado--------------------------------
+
+//    /**
+//     * Función para cargar el bote o vaciarle a cero
+//     *
+//     * @param cantidad
+//     */
+//    private void ajustarSaldoBote(int cantidad) {
+//        DocumentReference boteMonedasRef = mfirestore.collection(Bote.TABLE_BOTE).document(Bote.ID_DOCUMENTO);
+//        boteMonedasRef.update(Bote.PUNTOS, cantidad)
+//                .addOnSuccessListener(aVoid -> Log.d("TAG", "Saldo ajustado con éxito"))
+//                .addOnFailureListener(e -> Log.d("TAG", "Error al ajustar el saldo: " + e.getMessage()));
+//    }
 //    /**
 //     * metodo para guardar la jugada en firebase
 //     */
