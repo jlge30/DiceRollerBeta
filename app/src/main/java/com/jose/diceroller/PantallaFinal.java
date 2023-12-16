@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -90,6 +91,8 @@ public class PantallaFinal extends AppCompatActivity {
 
     private int puntosPartida;
 
+    private int valorBoteEntero;
+
     public static final int REQUEST_CODE_PERMISSIONS = 1;
 
     private static final int REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO = 2;
@@ -128,6 +131,7 @@ public class PantallaFinal extends AppCompatActivity {
         Intent intent = getIntent();
         puntosPartida = intent.getIntExtra("Puntos",0);
 
+
 //        int datosGlobal = datos.getPuntuacion();
         String puntos = "Monedas ganadas: " + String.valueOf(puntosPartida);//mostramos el valor de la puntuación global
         textView.setText(puntos);//mensaje de número de monedas
@@ -145,6 +149,7 @@ public class PantallaFinal extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, REQUEST_CODE_PERMISO_ESCRIBIR_EXTERNO);
 
         verifyPermission(this);
+        new ObtenerValorBoteTask().execute();
 
 
 //        if (puntosPartida > 10) {
@@ -169,9 +174,21 @@ public class PantallaFinal extends AppCompatActivity {
                     createFile(getWindow().getDecorView().getRootView(), "result");
                 } else {
                     Bitmap capture = createScreenshot();
-                    int datosGrabar1 = datos.getPuntuacion();
-                    crearJugada(puntosPartida);
-                    insertJugadorRx(puntosPartida);
+                    int datosGrabar;
+
+                    if (puntosPartida < 15){
+                        Toast.makeText(PantallaFinal.this, "Menos de 15 Generaste Bote!!!", Toast.LENGTH_SHORT).show();
+                        datosGrabar = puntosPartida;
+                        generaBote(puntosPartida + datos.getPuntosBote());
+                    }else{
+                        Toast.makeText(PantallaFinal.this, "Más de 15 Puntos, ganaste bote!!!", Toast.LENGTH_SHORT).show();
+                        datosGrabar = puntosPartida + datos.getPuntosBote();
+                        generaBote(0);
+
+                    }
+                    //int datosGrabar1 = datos.getPuntuacion();
+                    crearJugada(datosGrabar);
+                    insertJugadorRx(datosGrabar);
                     gamerN.setText("");//vaciamos la caja de texto
                     datos.setPuntuacion(0);//dejamos la puntuación a 0
                     textView.setVisibility(View.INVISIBLE);//dejamos invisibles la puntuacion y el texto de título
@@ -201,7 +218,68 @@ public class PantallaFinal extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
+
+
+
+    private class ObtenerValorBoteTask extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            try {
+
+                Call<Integer> call = apiService.obtenerValorBote();
+                Response<Integer> response = call.execute();
+
+                if (response.isSuccessful()) {
+                    return response.body();
+                } else {
+
+                    return 0;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                   return 0; // Valor predeterminado o manejo de error
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer valorBote) {
+            valorBoteEntero = valorBote;
+        }
+    }
+
+
+    /**
+     * función que actuliza el valor del bote.
+     * @param puntosPartida
+     */
+    private void generaBote(int puntosPartida) {
+        Call<Void> call = apiService.ajustarValorDelBote(puntosPartida);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(PantallaFinal.this, "Bote actualizado", Toast.LENGTH_SHORT).show();
+                    // Éxito al ajustar el valor del bote
+                } else {
+                    Toast.makeText(PantallaFinal.this, "Error al actualizar el bote", Toast.LENGTH_SHORT).show();
+                    // Manejar el error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Manejar el fallo en la comunicación
+            }
+        });
+    }
+
+
+
 
 
     //Insertar jugador con RxJava
@@ -463,319 +541,4 @@ public class PantallaFinal extends AppCompatActivity {
 
 
 
-    ///--------------------no usado--------------------------------
-
-//    /**
-//     * Función para cargar el bote o vaciarle a cero
-//     *
-//     * @param cantidad
-//     */
-//    private void ajustarSaldoBote(int cantidad) {
-//        DocumentReference boteMonedasRef = mfirestore.collection(Bote.TABLE_BOTE).document(Bote.ID_DOCUMENTO);
-//        boteMonedasRef.update(Bote.PUNTOS, cantidad)
-//                .addOnSuccessListener(aVoid -> Log.d("TAG", "Saldo ajustado con éxito"))
-//                .addOnFailureListener(e -> Log.d("TAG", "Error al ajustar el saldo: " + e.getMessage()));
-//    }
-//    /**
-//     * metodo para guardar la jugada en firebase
-//     */
-//    private void crearJugadaDatos() {
-//        UUID uuid = UUID.randomUUID();
-//        String playerId = uuid.toString();
-//        String nombre = datos.getNombreJugador();
-//        int nuevaPuntuacion;
-//        if (ganarBote()){
-//            nuevaPuntuacion = datos.getPuntuacion();
-//        }else{
-//            nuevaPuntuacion = datos.getPuntuacion();
-//        }
-//        double nuevaLatitud = datos.getLatitud();
-//        double nuevaLongitud = datos.getLongitud();
-//        crearJugada(playerId,nombre,nuevaPuntuacion, nuevaLatitud, nuevaLongitud );
-//    }
-//
-//    /**
-//     * función para crear las jugadas en firebase RealTime no usado
-//     * @param playerId
-//     * @param nombre
-//     * @param nuevaPuntuacion
-//     * @param nuevaLatitud
-//     * @param nuevaLongitud
-//     */
-//    private void crearJugada(String playerId, String nombre, int nuevaPuntuacion, double nuevaLatitud, double nuevaLongitud) {
-//        //cogemos la fecha actual
-//        Date currentDate = new Date();
-//        // Crea un objeto SimpleDateFormat con el formato deseado
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        // convertimos la fecha a una cadena en el formato especificado
-//        String dateString = dateFormat.format(currentDate);
-//        databaseReference = FirebaseDatabase.getInstance().getReference(PlayerHistory.TABLE_JUGADORES);
-//        PlayerHistory playerHistory = new PlayerHistory(playerId, nombre,nuevaPuntuacion, dateString, nuevaLatitud, nuevaLongitud );
-//        // Crea un nuevo nodo con la UID del usuario y guarda los datos
-//        databaseReference.child(playerId).setValue(playerHistory);
-//    }
-//
-//
-//    /**
-//     * insertamos el jugador con Gson en firestore de firebase Utilizamos Gson
-//     * @param jugador
-//     */
-//    private void insertarJugadorFirestore(PlayerHistory jugador){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(jugador);
-//        java.lang.reflect.Type type =new TypeToken<Map<String, Object>>() {}.getType();
-//        Map<String, Object> map = gson.fromJson(json, type);
-//        mfirestore.collection(PlayerHistory.TABLE_JUGADORES)
-//                .add(map)
-//                .addOnSuccessListener(aVoid ->{
-//                    //operación con éxito
-//                    Toast.makeText(PantallaFinal.this, "Insertado correctamente",Toast.LENGTH_SHORT).show();
-//                }).addOnFailureListener(e ->{
-//
-//                    Toast.makeText(PantallaFinal.this, "Error al insertar",Toast.LENGTH_SHORT).show();
-//
-//                });
-//
-//    }
-//
-//
-//    private void insertarBoteFirestore(Bote bote){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(bote);
-//        java.lang.reflect.Type type =new TypeToken<Map<String, Object>>() {}.getType();
-//        Map<String, Object> map = gson.fromJson(json, type);
-//        mfirestore.collection(Bote.TABLE_BOTE)
-//                .add(map)
-//                .addOnSuccessListener(aVoid ->{
-//                    //operación con éxito
-//                    Toast.makeText(PantallaFinal.this, "Bote Insertado correctamente",Toast.LENGTH_SHORT).show();
-//                }).addOnFailureListener(e ->{
-//
-//                    Toast.makeText(PantallaFinal.this, "Error al insertar",Toast.LENGTH_SHORT).show();
-//
-//                });
-//
-//    }
-//
-//    /**
-//     * función para chequear el bote
-//     */
-//    private void checBote(){
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//
-//        DatabaseReference registro = database.getReference("boteMonedas");
-//        registro.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(@io.reactivex.rxjava3.annotations.NonNull DataSnapshot dataSnapshot) {
-//
-//                int dato = dataSnapshot.getValue(Integer.class);
-//                String datoString = String.valueOf(dato);
-//                Toast.makeText(PantallaFinal.this, "El bote tienes: "+String.valueOf(datos.getPuntosBote()), Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@io.reactivex.rxjava3.annotations.NonNull DatabaseError databaseError) {
-//                // Se produce un error
-//            }
-//        });
-//    }
-//
-//    /**
-//     * Agrega una moneda al bote
-//     *
-//     * @param cantidad Cantidad de monedas a agregar
-//     */
-//    private void agregarMonedaAlBote(int cantidad) {
-//        DatabaseReference boteReference = FirebaseDatabase.getInstance().getReference("boteMonedas");
-//        boteReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    int cantidadActual = dataSnapshot.getValue(Integer.class);
-//                    boteReference.setValue(cantidadActual + cantidad)
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-//                                    Log.d("PantallaFinal", "Moneda agregada al bote con éxito");
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Log.e("PantallaFinal", "Error al agregar moneda al bote", e);
-//                                }
-//                            });
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Log.e("PantallaFinal", "Error al obtener la cantidad actual del bote", databaseError.toException());
-//            }
-//        });
-//    }
-//
-//    /**
-//     * Función para crear el bote si no está creado
-//     */
-//    private void crearBote(){
-//        // Asegúrate de tener la referencia al nodo del bote
-//        DatabaseReference boteReference = FirebaseDatabase.getInstance().getReference("boteMonedas");
-//
-//        // Verifica si el nodo del bote ya existe
-//        boteReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (!dataSnapshot.exists()) {
-//                    // Si no existe, crea el nodo del bote con un valor inicial
-//                    boteReference.setValue(0)
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-//                                    // El nodo del bote se ha creado con éxito
-//                                    Log.d("Firebase", "Nodo del bote creado con éxito");
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    // Error al intentar crear el nodo del bote
-//                                    Log.e("Firebase", "Error al crear el nodo del bote", e);
-//                                }
-//                            });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Manejar errores si es necesario
-//                Log.e("Firebase", "Error al verificar la existencia del nodo del bote", databaseError.toException());
-//            }
-//        });
-//
-//    }
-//
-//    /**
-//     * Metodo para vaciar bote, pendiente de ver funcionamiento retrofit
-//     */
-//    private void sacarBote(){
-//        // Crea una referencia a la base de datos de Firebase
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//
-//        // Agrega un ValueEventListener al registro
-//        DatabaseReference registro = database.getReference("boteMonedas");
-//        registro.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                // Recupera el dato del registro
-//                int dato = dataSnapshot.getValue(Integer.class);
-//                String datoString = String.valueOf(dato);
-//                // Ajusta el dato a cero
-//                dato = 0;
-//                // Actualiza el registro con el nuevo dato
-//                registro.setValue(dato);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Se produce un error
-//            }
-//        });
-//    }
-//
-//
-//
-//
-//    /**
-//     * funcion que retorna la cantidad bote que hay
-//     * @return Saldo del bote como un entero.
-//     */
-//    private int checkBoteGson2() {
-//        final int[] saldoActualBote = {0};
-//
-//        mfirestore.collection(Bote.TABLE_BOTE)
-//                .document(Bote.ID_DOCUMENTO)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        if (document.exists()) {
-//                            String json = gson.toJson(document.getData());
-//                            Bote bote = gson.fromJson(json, Bote.class);
-//                            if (bote != null) {
-//                                Log.d("TAG", "El saldo del bote esSSSS: " + bote.getPuntosBote());
-//                                String saldoBote = bote.getPuntosBote();
-//
-//                                saldoActualBote[0] = Integer.parseInt(saldoBote);
-//                                Toast.makeText(PantallaFinal.this, "Bote actual: "+saldoBote, Toast.LENGTH_SHORT).show();
-//                                saveName.setVisibility(View.VISIBLE);//hasta que no vemos el saldo del bote no lo hacemos visible
-//                            }
-//                        } else {
-//                            Log.d("TAG", "El documento no existe");
-//                        }
-//                    } else {
-//                        Log.d("TAG", "Error al obtener el documento: " + task.getException());
-//                    }
-//                });
-//
-//        return saldoActualBote[0];
-//    }
-//
-//    /**
-//     * función para saber el saldo del bote
-//     */
-//    private void checkBoteGson1() {
-//        mfirestore.collection(Bote.TABLE_BOTE)
-//                .document(Bote.ID_DOCUMENTO) //id del docuemnto de la consola de firebase
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        if (document.exists()) {
-//                            String json = gson.toJson(document.getData());//convertimos en String los datos del objeto
-//                            Bote bote = gson.fromJson(json, Bote.class);// lo transformamos en la clase
-//                            if (bote != null) {
-//                                Log.d("TAG", "El saldo del bote es: " + bote.getPuntosBote());
-//                                String saldoBote = bote.getPuntosBote();
-//                                datos.setPuntosBote(Integer.parseInt(saldoBote));
-//                            }
-//                        } else {
-//                            Log.d("TAG", "El documento no existe");
-//                        }
-//                    } else {
-//                        Log.d("TAG", "Error al obtener el documento: " + task.getException());
-//                    }
-//                });
-//    }
-//
-//    private void checkBoteGson() {
-//        mfirestore.collection(Bote.TABLE_BOTE)
-//                .document(Bote.ID_DOCUMENTO)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        if (document.exists()) {
-//                            String json = gson.toJson(document.getData());
-//                            Bote bote = gson.fromJson(json, Bote.class);
-//                            if (bote != null) {
-//                                Log.d("TAG", "El saldo del bote esSSSS: " + bote.getPuntosBote());
-//                                String saldoBote = bote.getPuntosBote();
-//                                int saldoActualBote = Integer.parseInt(saldoBote);
-//
-//                                // Realiza acciones con el saldo, por ejemplo, guardar la partida
-//                                //guardarPartida(saldoActualBote);
-//                            }
-//                        } else {
-//                            Log.d("TAG", "El documento no existe");
-//                        }
-//                    } else {
-//                        Log.d("TAG", "Error al obtener el documento: " + task.getException());
-//                    }
-//                });
-//    }
-//
-//}
 

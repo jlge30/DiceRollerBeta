@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,16 +30,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.jose.diceroller.db.ApiClient;
+import com.jose.diceroller.db.ApiService;
 import com.jose.diceroller.db.Bote;
 import com.jose.diceroller.db.PlayerHistory;
 import com.jose.diceroller.db.ListAdapter;
 
 
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 
 public class PlayersOnlineActivity extends AppCompatActivity {
@@ -48,6 +54,7 @@ public class PlayersOnlineActivity extends AppCompatActivity {
     TextView txtBote;
     GlobalVariables datos;
 
+    ApiService apiService;
     private Gson gson;
 
     FirebaseFirestore firestore;
@@ -62,6 +69,7 @@ public class PlayersOnlineActivity extends AppCompatActivity {
         btnSalir = findViewById(R.id.btn_salir);
         txtBote = findViewById(R.id.txt_bote);
         firestore = FirebaseFirestore.getInstance();
+        apiService = ApiClient.getClient().create(ApiService.class);//instanciamos la api para cargar los jugadores con Retrofit
         gson = new Gson();
         //checkBoteGson();
 
@@ -81,6 +89,8 @@ public class PlayersOnlineActivity extends AppCompatActivity {
                 navigateToPlay();
             }
         });
+
+        new ObtenerValorBoteTask().execute();
 
 
 
@@ -196,142 +206,47 @@ public class PlayersOnlineActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         int id = item.getItemId();
-        if ( id == R.id.menu_borrar_registros){
-            mostrarDialogoDeConfirmacion();
-        }
-        else if(id == R.id.menu_salir){
+        if ( id == R.id.menu_salir){
             signOut();
         }
+
         return true;
     }
 
 
-    /**
-     * funicón borrado de la bbdd de los jugadores
-     */
-    private void borrarDB() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(PlayerHistory.TABLE_JUGADORES);
 
-        Task<DataSnapshot> tareaLeerJugadores = databaseReference.get();
-        tareaLeerJugadores.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot dataSnapshot = task.getResult();
+    private class ObtenerValorBoteTask extends AsyncTask<Void, Void, Integer> {
 
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                            Task<Void> tareaEliminarJugador = playerSnapshot.getRef().removeValue();
-                            tareaEliminarJugador.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(PlayersOnlineActivity.this, "Registros de jugadores eliminados", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Exception exception = task.getException();
-                                    }
-                                }
-                            });
-                        }
-                    } else {
-                        Toast.makeText(PlayersOnlineActivity.this, "No hay registros de jugadores para eliminar", Toast.LENGTH_SHORT).show();
-                    }
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            try {
+                // Realizar la llamada a la API para obtener el valor del bote
+                Call<Integer> call = apiService.obtenerValorBote();
+                Response<Integer> response = call.execute();
+
+                if (response.isSuccessful()) {
+                    return response.body();
                 } else {
-                    Exception exception = task.getException();
+                    // Manejar el error
+                    return 0; // Valor predeterminado o manejo de error
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Manejar la excepción
+                return 0; // Valor predeterminado o manejo de error
             }
-        });
-    }
+        }
+
+        @Override
+        protected void onPostExecute(Integer valorBote) {
+
+            int valorBoteEntero = valorBote;
+            String valorMostrar = String.valueOf(valorBoteEntero);
+            txtBote.setText("Bote generado: "+valorMostrar);
+            datos.setPuntosBote(valorBoteEntero);
 
 
-
-
-
-    /**
-     * Aviso antes de borrar la BBDD
-     */
-    private void mostrarDialogoDeConfirmacion() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirmación");
-        builder.setMessage("¿Estás seguro de que deseas eliminar todos los registros?");
-
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Código para la acción afirmativa
-                borrarDB();
-                //sacarBote();
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.show();
-    }
-
-
-
-    //////////////no usado//////////////
-
-    private void sacarBote() {
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        DatabaseReference registro = database.getReference("boteMonedas");
-
-        Task<DataSnapshot> tareaLeerBote = registro.get();
-
-        tareaLeerBote.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot dataSnapshot = task.getResult();
-
-                    Integer dato = dataSnapshot.getValue(Integer.class);
-
-                    if (dato != null) {
-
-                        dato = 0;
-
-                    }
-                } else {
-                    Exception exception = task.getException();
-                }
-            }
-        });
-
-    }
-
-    private void checBote(){
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        DatabaseReference registro = database.getReference("boteMonedas");
-        registro.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@io.reactivex.rxjava3.annotations.NonNull DataSnapshot dataSnapshot) {
-                int dato = dataSnapshot.getValue(Integer.class);
-                String datoString = String.valueOf(dato);
-                txtBote.setText("Bote acumulado: "+ datoString);
-                Toast.makeText(PlayersOnlineActivity.this, "El bote tienes: "+String.valueOf(datos.getPuntosBote()), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@io.reactivex.rxjava3.annotations.NonNull DatabaseError databaseError) {
-                // Se produce un error
-            }
-        });
-    }
-
-    private void actualizar(Bote bote) {
-
-        txtBote.setText("Bote acumulado: "+String.valueOf(bote.getPuntosBote()));
+        }
     }
 
 }
